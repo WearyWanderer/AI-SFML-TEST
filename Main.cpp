@@ -11,13 +11,22 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
+#include "MapLoader.h"
+#include "MapDrawer.h"
+
+#define MapMngr MapLoader::getInstance()
+#define MapDrwr MapDrawer::getInstance()
+
+float getFPS(const sf::Time& time);
+
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test");
+	window.setFramerateLimit(0);
+	window.setVerticalSyncEnabled(false);
 
-	sf::Clock clock;
-	float lastTime = 0;
-
+	MapMngr.LoadMap("maps/testMap.map"); //load the map
+	sf::Clock FPSClock;
 
 	while (window.isOpen())
 	{
@@ -30,14 +39,24 @@ int main()
 		}
 		#pragma endregion
 
-		float currentTime = clock.restart().asSeconds();
-		float fps = 1.f / currentTime;
-		lastTime = currentTime;
-		std::cout << fps << std::endl; 
+		#pragma region FPSCounter
+
+		float fps = getFPS(FPSClock.restart());
+		std::cout << fps << std::endl;
+
+		#pragma endregion
 
 		window.clear();
+
+		MapDrwr.DrawMap(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth());
+		
 		window.display();
 	}
 
 	return 0;
+}
+
+float getFPS(const sf::Time& time)
+{
+	return (1000000.0f / time.asMicroseconds());
 }
