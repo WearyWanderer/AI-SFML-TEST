@@ -41,12 +41,7 @@ void MapLoader::LoadMap(std::string filepath)
 				mapVector[i] = 1;
 			}
 				break;
-			case '.': //impassable terrain
-			{
-				mapVector[i] = 2;
-			}
-				break;
-			case ' ': //area that is moveable
+			case '.': 
 			{
 				mapVector[i] = 0;
 			}
