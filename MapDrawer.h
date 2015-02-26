@@ -17,7 +17,7 @@ public:
 		return instance;
 	}
 
-	void DrawMap(sf::RenderWindow* screen, std::vector<int> mapToDraw, int mapHeight, int mapWidth);
+	void DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight, int mapWidth);
 
 private:
 	MapDrawer();
@@ -25,7 +25,5 @@ private:
 	// technique of deleting the methods we don't want.
 	MapDrawer(MapDrawer const&) = delete;
 	void operator=(MapDrawer const&) = delete;
-
-	std::vector<int> mapVector;
 };
 

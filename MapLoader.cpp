@@ -29,10 +29,8 @@ void MapLoader::LoadMap(std::string filepath)
 		}
 	}
 
-	for (int x = 0; x < mapWidth; x++)
+	for (int i = 0; i < mapHeight*mapWidth; i++)
 	{
-		for (int y = 0; y < mapWidth; y++)
-		{
 			char thisTileSymbol;
 			mapFile.get(thisTileSymbol);
 
@@ -40,17 +38,17 @@ void MapLoader::LoadMap(std::string filepath)
 			{
 			case '@': //terrain out of bounds
 			{
-				mapVector.push_back(1);
+				mapVector[i] = 1;
 			}
 				break;
 			case '.': //impassable terrain
 			{
-				mapVector.push_back(2);
+				mapVector[i] = 2;
 			}
 				break;
 			case ' ': //area that is moveable
 			{
-				mapVector.push_back(0);
+				mapVector[i] = 0;
 			}
 				break;
 			default:
@@ -58,8 +56,7 @@ void MapLoader::LoadMap(std::string filepath)
 			}
 
 		}
-	}
-
-
-
 }
+
+
+

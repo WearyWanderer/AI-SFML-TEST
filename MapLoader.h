@@ -18,7 +18,7 @@ public:
 	}
 
 	void LoadMap(std::string filepath);
-	inline std::vector<int> GetMap(){ return mapVector; }
+	inline int* GetMap(){ return mapVector; }
 	inline int GetMapHeight(){ return mapHeight; }
 	inline int GetMapWidth(){ return mapWidth; }
 
@@ -29,7 +29,7 @@ private:
 	MapLoader(MapLoader const&) = delete;
 	void operator=(MapLoader const&) = delete;
 
-	std::vector<int> mapVector;
+	int mapVector[512*512]; //defaults to a 512x512 map, but this can be reallocated
 	int mapWidth;
 	int	mapHeight;
 };
