@@ -27,6 +27,9 @@ int main()
 
 	MapMngr.LoadMap("maps/testMap.map"); //load the map
 	sf::Clock FPSClock;
+	sf::Clock WorldTickClock;
+
+	int FPSCounter = 0;
 
 	while (window.isOpen())
 	{
@@ -38,19 +41,20 @@ int main()
 				window.close();
 		}
 		#pragma endregion
-
-		#pragma region FPSCounter
-
-		float fps = getFPS(FPSClock.restart());
-		std::cout << fps << std::endl;
-
-		#pragma endregion
-
+		
+		if (WorldTickClock.getElapsedTime().asSeconds() >= 1)
+		{
+			#pragma region FPSCounter
+				std::cout << FPSCounter << std::endl;
+				FPSCounter = 0;
+				WorldTickClock.restart();
+			#pragma endregion
+		}
 		window.clear();
-
 		MapDrwr.DrawMap(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth());
 		
 		window.display();
+		FPSCounter++;
 	}
 
 	return 0;

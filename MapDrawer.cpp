@@ -11,7 +11,7 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight
 	int currentX = 1;
 	int currentY = 1;
 	int arrayCount = mapHeight * mapWidth;
-	sf::CircleShape circle(2.5f,5);
+	sf::RectangleShape circle(sf::Vector2f(2.5f,2.5f));
 	circle.setFillColor(sf::Color::Blue);
 	circle.setPosition(5,5);
 
