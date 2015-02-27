@@ -25,5 +25,7 @@ private:
 	// technique of deleting the methods we don't want.
 	MapDrawer(MapDrawer const&) = delete;
 	void operator=(MapDrawer const&) = delete;
+
+	sf::Vector2 cameraOffset = sf::Vector2(0,0);
 };
 
