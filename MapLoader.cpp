@@ -10,9 +10,9 @@ void MapLoader::LoadMap(std::string filepath)
 {
 	std::ifstream mapFile(filepath);
 	//Variables
-	int mapHeaders = 4; //the amount of lines that need to be parsed as lines first
+	int mapHeaders = 3; //the amount of lines that need to be parsed as lines first
 
-	for (int i = 0; i < mapHeaders; i++)
+	for (int i = 0; i <= mapHeaders; i++)
 	{
 		std::string thisLine;
 		getline(mapFile, thisLine);
