@@ -5,6 +5,7 @@
 #include <fstream>
 #include <algorithm>
 #include <vector>
+#include <sfml\System\Vector2.hpp>
 #include <sfml\Graphics.hpp>
 
 class MapDrawer
@@ -17,7 +18,14 @@ public:
 		return instance;
 	}
 
-	void DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight, int mapWidth);
+	#pragma region DrawingMap
+		void DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight, int mapWidth);
+		inline void ToggleRedraw(){ needsRedraw = !needsRedraw; }
+		inline bool GetRedrawState(){ return needsRedraw; }
+	#pragma endregion
+
+	void AlterCameraOffset(sf::Vector2i xAndY);
+	inline void ResetCameraOffset(){ cameraOffset = sf::Vector2i(0, 0); };
 
 private:
 	MapDrawer();
@@ -26,6 +34,7 @@ private:
 	MapDrawer(MapDrawer const&) = delete;
 	void operator=(MapDrawer const&) = delete;
 
-	sf::Vector2 cameraOffset = sf::Vector2(0,0);
+	bool needsRedraw = true;
+	sf::Vector2i cameraOffset;
 };
 

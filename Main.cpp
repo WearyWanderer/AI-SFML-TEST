@@ -13,9 +13,11 @@
 
 #include "MapLoader.h"
 #include "MapDrawer.h"
+#include "InputManager.h"
 
 #define MapMngr MapLoader::getInstance()
 #define MapDrwr MapDrawer::getInstance()
+#define InputMngr InputManager::getInstance()
 
 float getFPS(const sf::Time& time);
 
@@ -42,19 +44,26 @@ int main()
 		}
 		#pragma endregion
 		
-		if (WorldTickClock.getElapsedTime().asSeconds() >= 1)
-		{
-			#pragma region FPSCounter
+		#pragma region FPSCounter
+			if (WorldTickClock.getElapsedTime().asSeconds() >= 1)
+			{
 				std::cout << FPSCounter << std::endl;
 				FPSCounter = 0;
 				WorldTickClock.restart();
-			#pragma endregion
+			}
+			FPSCounter++;
+		#pragma endregion
+
+		InputMngr.InputCycle();
+
+		if (MapDrwr.GetRedrawState())
+		{
+			window.clear();
+			MapDrwr.DrawMap(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth());
+			window.display();
 		}
-		window.clear();
-		MapDrwr.DrawMap(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth());
 		
-		window.display();
-		FPSCounter++;
+		
 	}
 
 	return 0;
