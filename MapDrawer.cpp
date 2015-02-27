@@ -10,12 +10,12 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight
 {
 	if (needsRedraw)
 	{
-		int currentX = 1 + cameraOffset.x;
-		int currentY = 1 + cameraOffset.y;
+		int currentX = 1;
+		int currentY = 1;
 		int arrayCount = mapHeight * mapWidth;
 		sf::RectangleShape circle(sf::Vector2f(2.5f, 2.5f));
 		circle.setFillColor(sf::Color::Blue);
-		circle.setPosition(2.5 + (cameraOffset.x * 2.5), 2.5 + (cameraOffset.y * 2.5));
+		circle.setPosition(2.5, 2.5);
 
 		for (int i = 1; i <= arrayCount; i++)
 		{
@@ -40,7 +40,7 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight
 				break;
 			case 1:
 			{
-				if ((currentX + cameraOffset.x) * 2.5 <= 960 + (cameraOffset.x * 2.5) && (currentY + cameraOffset.y) * 2.5 <= 720 + (cameraOffset.y * 2.5)) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
+				if (currentX * 2.5 <= 960 && currentY * 2.5 <= 720 * 2.5) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
 					screen->draw(circle);
 			}
 				break;
