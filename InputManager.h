@@ -3,8 +3,10 @@
 #include <sfml\Window\Keyboard.hpp>
 #include <sfml\Window\Mouse.hpp>
 #include "MapDrawer.h"
+#include "ViewManager.h"
 
 #define MapDrwr MapDrawer::getInstance()
+#define ViewMngr ViewManager::getInstance()
 
 class InputManager
 {
@@ -16,7 +18,7 @@ public:
 		return instance;
 	}
 
-	void InputCycle();
+	void InputCycle(sf::RenderWindow* targetWindow);
 
 private:
 	InputManager();

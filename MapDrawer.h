@@ -7,6 +7,9 @@
 #include <vector>
 #include <sfml\System\Vector2.hpp>
 #include <sfml\Graphics.hpp>
+#include "ViewManager.h"
+
+#define ViewMngr ViewManager::getInstance()
 
 class MapDrawer
 {
@@ -24,9 +27,6 @@ public:
 		inline bool GetRedrawState(){ return needsRedraw; }
 	#pragma endregion
 
-	void AlterCameraOffset(sf::Vector2i xAndY);
-	inline void ResetCameraOffset(){ cameraOffset = sf::Vector2i(0, 0); };
-
 private:
 	MapDrawer();
 
@@ -35,6 +35,5 @@ private:
 	void operator=(MapDrawer const&) = delete;
 
 	bool needsRedraw = true;
-	sf::Vector2i cameraOffset;
 };
 

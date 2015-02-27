@@ -14,10 +14,12 @@
 #include "MapLoader.h"
 #include "MapDrawer.h"
 #include "InputManager.h"
+#include "ViewManager.h"
 
 #define MapMngr MapLoader::getInstance()
 #define MapDrwr MapDrawer::getInstance()
 #define InputMngr InputManager::getInstance()
+#define ViewMngr ViewManager::getInstance()
 
 float getFPS(const sf::Time& time);
 
@@ -32,6 +34,9 @@ int main()
 	sf::Clock WorldTickClock;
 
 	int FPSCounter = 0;
+	ViewMngr.SetView(sf::FloatRect(0, 0, 960, 720));
+
+	window.setView(ViewMngr.GetView());
 
 	while (window.isOpen())
 	{
@@ -54,7 +59,7 @@ int main()
 			FPSCounter++;
 		#pragma endregion
 
-		InputMngr.InputCycle();
+		InputMngr.InputCycle(&window);
 
 		if (MapDrwr.GetRedrawState())
 		{
@@ -62,7 +67,6 @@ int main()
 			MapDrwr.DrawMap(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth());
 			window.display();
 		}
-		
 		
 	}
 	return 0;

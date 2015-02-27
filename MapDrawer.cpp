@@ -3,7 +3,6 @@
 
 MapDrawer::MapDrawer()
 {
-	cameraOffset = sf::Vector2i(0, 0);
 }
 
 void MapDrawer::DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight, int mapWidth)
@@ -17,7 +16,7 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight
 		circle.setFillColor(sf::Color::Blue);
 		circle.setPosition(2.5, 2.5);
 
-		for (int i = 1; i <= arrayCount; i++)
+		for (int i = 0; i < arrayCount; i++)
 		{
 			if (currentX == mapWidth + 1)
 			{
@@ -31,32 +30,31 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight
 				circle.move(2.5, 0);
 			}
 
-			switch (mapToDraw[i])
-			{
-			case 0: //walkable terrain, draw nothing
-			{
-
-			}
-				break;
-			case 1:
-			{
-				if (currentX * 2.5 <= 960 && currentY * 2.5 <= 720 * 2.5) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
+			if (currentY == mapHeight - 1 || currentX == mapWidth + 1)
+			{ 
+				if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * 2.5, currentY * 2.5))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
 					screen->draw(circle);
 			}
-				break;
-			default:
-				break;
+			else
+			{
+				switch (mapToDraw[i])
+				{
+				case 0: //walkable terrain, draw nothing
+				{
+
+				}
+					break;
+				case 1:
+				{
+					if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * 2.5, currentY * 2.5))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
+						screen->draw(circle);
+				}
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}
 	ToggleRedraw();
-}
-
-void MapDrawer::AlterCameraOffset(sf::Vector2i xAndY)
-{
-	if (cameraOffset.x + xAndY.x >= -555 + (960 / 2.5) && cameraOffset.x + xAndY.x <= 0)
-		cameraOffset.x += xAndY.x;
-
-	if (cameraOffset.y + xAndY.y >= -500 && cameraOffset.y + xAndY.y <= 0)
-		cameraOffset.y += xAndY.y;
 }
