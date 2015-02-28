@@ -26,14 +26,20 @@ float getFPS(const sf::Time& time);
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test");
-	window.setFramerateLimit(0);
-	window.setVerticalSyncEnabled(false);
+	//window.setFramerateLimit(0);
+	
+	//window.setVerticalSyncEnabled(false);
 
 	MapMngr.LoadMap("maps/maze1.map"); //load the map
 	sf::Clock FPSClock;
 	sf::Clock WorldTickClock;
 
+	sf::Clock clock;
+	sf::Time elapsed;
+	sf::Int32 TicksPerFrame = 0;
+
 	int FPSCounter = 0;
+
 	ViewMngr.SetView(sf::FloatRect(0, 0, 960, 720));
 
 	window.setView(ViewMngr.GetView());
@@ -50,13 +56,19 @@ int main()
 		#pragma endregion
 		
 		#pragma region FPSCounter
-			if (WorldTickClock.getElapsedTime().asSeconds() >= 1)
-			{
-				std::cout << FPSCounter << std::endl;
-				FPSCounter = 0;
-				WorldTickClock.restart();
-			}
-			FPSCounter++;
+				//Fixed this for you.
+				elapsed = clock.restart();
+				TicksPerFrame += elapsed.asMilliseconds();
+
+				if (TicksPerFrame >= 1000)
+				{
+					std::cout << FPSCounter << std::endl;
+					FPSCounter = 0;
+
+					TicksPerFrame = 0.f;
+					WorldTickClock.restart();
+				}
+				FPSCounter++;
 		#pragma endregion
 
 		InputMngr.InputCycle(&window);
