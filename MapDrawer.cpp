@@ -5,7 +5,7 @@ MapDrawer::MapDrawer()
 {
 }
 
-void MapDrawer::DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight, int mapWidth)
+void MapDrawer::DrawMap(sf::RenderWindow* screen, Tile mapToDraw[], int mapHeight, int mapWidth)
 {
 	if (needsRedraw)
 	{
@@ -38,17 +38,24 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, int mapToDraw[], int mapHeight
 			}
 			else
 			{
-				switch (mapToDraw[i])
+				switch (mapToDraw[i].checkSymbol())
 				{
-				case 0: //walkable terrain, draw nothing
+				case 'G':
+				case '.': //walkable terrain, draw nothing
 				{
 
 				}
 					break;
-				case 1:
+				case '@':
+				case 'O':
 				{
 					if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * zoomValue, currentY * zoomValue))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
 						screen->draw(circle);
+				}
+					break;
+				case 'T':
+				{
+
 				}
 					break;
 				default:

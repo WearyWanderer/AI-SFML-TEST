@@ -8,6 +8,7 @@
 #include <sfml\System\Vector2.hpp>
 #include <sfml\Graphics.hpp>
 #include "ViewManager.h"
+#include "MapLoader.h"
 
 #define ViewMngr ViewManager::getInstance()
 
@@ -28,7 +29,7 @@ public:
 	}
 
 	#pragma region DrawingMap
-		void DrawMap(sf::RenderWindow* screen, int* mapToDraw, int mapHeight, int mapWidth);
+		void DrawMap(sf::RenderWindow* screen, Tile* mapToDraw, int mapHeight, int mapWidth);
 		inline void ToggleRedraw(){ needsRedraw = !needsRedraw; }
 		inline bool GetRedrawState(){ return needsRedraw; }
 	#pragma endregion

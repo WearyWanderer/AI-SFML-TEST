@@ -1,5 +1,9 @@
 #include "MapLoader.h"
 
+Tile::Tile()
+{
+
+}
 
 MapLoader::MapLoader()
 {
@@ -29,28 +33,17 @@ void MapLoader::LoadMap(std::string filepath)
 		}
 	}
 
-	for (int i = 0; i < mapHeight*mapWidth; i++)
+	int arrayStorage = 0;
+	for (int y = 0; y < mapHeight; y++)
 	{
+		for (int x = 0; x < mapWidth; x++)
+		{
 			char thisTileSymbol;
 			mapFile.get(thisTileSymbol);
-
-			switch (thisTileSymbol)
-			{
-			case '@': //terrain out of bounds
-			{
-				mapVector[i] = 1;
-			}
-				break;
-			case '.': 
-			{
-				mapVector[i] = 0;
-			}
-				break;
-			default:
-				break;
-			}
-
+			mapArray[arrayStorage] = Tile(x + 1, y + 1, thisTileSymbol);
+			arrayStorage++;
 		}
+	}
 }
 
 

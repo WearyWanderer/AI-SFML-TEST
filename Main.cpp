@@ -65,7 +65,7 @@ int main()
 					std::cout << FPSCounter << std::endl;
 					FPSCounter = 0;
 
-					TicksPerFrame = 0.f;
+					TicksPerFrame = 0;
 					WorldTickClock.restart();
 				}
 				FPSCounter++;

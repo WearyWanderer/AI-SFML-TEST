@@ -5,7 +5,20 @@
 #include <fstream>
 #include <algorithm>
 #include <vector>
+#include <sfml\System\Vector2.hpp>
 
+//structure of each tile in the isometric grid
+struct Tile
+{
+	int x, y;
+	char tileSymbol;
+
+	Tile();
+	Tile(int xPos, int yPos, char tileSymbolID) : x(xPos), y(yPos), tileSymbol(tileSymbolID) {}; //constructor
+
+	inline char checkSymbol(){ return tileSymbol; }
+	inline sf::Vector2i getPos(){ return sf::Vector2i(x, y); }
+};
 
 class MapLoader
 {
@@ -18,7 +31,7 @@ public:
 	}
 
 	void LoadMap(std::string filepath);
-	inline int* GetMap(){ return mapVector; }
+	inline Tile* GetMap(){ return mapArray; }
 	inline int GetMapHeight(){ return mapHeight; }
 	inline int GetMapWidth(){ return mapWidth; }
 
@@ -29,7 +42,7 @@ private:
 	MapLoader(MapLoader const&) = delete;
 	void operator=(MapLoader const&) = delete;
 
-	int mapVector[512*512]; //defaults to a 512x512 map, but this can be reallocated
+	Tile mapArray[512*512]; //defaults to a 512x512 map, but this can be reallocated
 	int mapWidth;
 	int	mapHeight;
 };
