@@ -25,5 +25,6 @@ private:
 	void operator=(ViewManager const&) = delete;
 
 	sf::View mainWindow;
+	int scrollSpeed = 4;
 };
 

@@ -12,7 +12,7 @@ void ViewManager::SetView(sf::FloatRect newView)
 
 void ViewManager::AlterView(int x, int y)
 {
-	mainWindow.move(x, y);
+	mainWindow.move(x * scrollSpeed, y * scrollSpeed);
 }
 
 bool ViewManager::IsInsideView(sf::Vector2f pixelPos)

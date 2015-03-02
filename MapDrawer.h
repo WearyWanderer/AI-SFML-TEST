@@ -11,6 +11,12 @@
 
 #define ViewMngr ViewManager::getInstance()
 
+enum zoomLevels
+{
+	Zoomx1 = 1,
+	Zoomx2 = 2
+};
+
 class MapDrawer
 {
 public:
@@ -27,6 +33,9 @@ public:
 		inline bool GetRedrawState(){ return needsRedraw; }
 	#pragma endregion
 
+	inline void SetZoom(int zoomToSet){ currentZoom = zoomToSet; }
+	float GetZoomValue(int currentZoom);
+
 private:
 	MapDrawer();
 
@@ -35,5 +44,6 @@ private:
 	void operator=(MapDrawer const&) = delete;
 
 	bool needsRedraw = true;
+	int currentZoom = Zoomx1;
 };
 
