@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <sfml\Graphics.hpp>
+#include "RTT_Node.h"
 
 class RTT_Tree
 {
@@ -10,7 +12,7 @@ public:
 
 private:
 
-	
+	RTT_Node rootNode;
 	
 };
 

@@ -24,12 +24,12 @@ void MapLoader::LoadMap(std::string filepath)
 		if (i == 1)
 		{
 			thisLine.erase(0, 6);
-			mapWidth = std::stoi(thisLine);
+			mapHeight = std::stoi(thisLine);
 		}
 		if (i == 2)
 		{
 			thisLine.erase(0, 6);
-			mapHeight = std::stoi(thisLine);
+			mapWidth = std::stoi(thisLine);
 		}
 	}
 

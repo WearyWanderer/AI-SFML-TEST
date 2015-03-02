@@ -30,7 +30,7 @@ int main()
 	
 	//window.setVerticalSyncEnabled(false);
 
-	MapMngr.LoadMap("maps/maze1.map"); //load the map
+	MapMngr.LoadMap("maps/dungeon2.map"); //load the map
 	sf::Clock FPSClock;
 	sf::Clock WorldTickClock;
 
@@ -56,11 +56,11 @@ int main()
 		#pragma endregion
 		
 		#pragma region FPSCounter
-				//Fixed this for you.
+				//Fixed this
 				elapsed = clock.restart();
 				TicksPerFrame += elapsed.asMilliseconds();
 
-				if (TicksPerFrame >= 1000)
+				if (TicksPerFrame >= 500)
 				{
 					std::cout << FPSCounter << std::endl;
 					FPSCounter = 0;

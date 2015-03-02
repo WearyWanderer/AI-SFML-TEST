@@ -33,8 +33,8 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, Tile mapToDraw[], int mapHeigh
 
 			if (currentY == mapHeight - 1 || currentX == mapWidth + 1)
 			{ 
-				if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * zoomValue, currentY * zoomValue))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
-					screen->draw(circle);
+				//if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * zoomValue, currentY * zoomValue))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
+				//	screen->draw(circle);
 			}
 			else
 			{
@@ -82,6 +82,7 @@ float MapDrawer::GetZoomValue(int currentZoom)
 	}
 		break;
 	default:
+		return 0;
 		break;
 	}
 }
