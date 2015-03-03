@@ -19,13 +19,11 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, Tile mapToDraw[], int mapHeigh
 
 		for (int i = 0; i < arrayCount; i++)
 		{
-			if (i == 512)
-				std::cout << "hit" << std::endl;
-			if (currentX == mapWidth + 1)
+			if (mapToDraw[i].getPos().x == 1 && i != 0)
 			{
-				circle.setPosition(zoomValue, currentY * zoomValue);
 				currentX = 1;
 				currentY += 1;
+				circle.setPosition(zoomValue, currentY * zoomValue);
 			}
 			else
 			{

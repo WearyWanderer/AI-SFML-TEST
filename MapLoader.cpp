@@ -40,7 +40,15 @@ void MapLoader::LoadMap(std::string filepath)
 		{
 			char thisTileSymbol;
 			mapFile.get(thisTileSymbol);
-			mapArray[arrayStorage] = Tile(x + 1, y + 1, thisTileSymbol);
+
+			if (thisTileSymbol == '\n') //if it is a newline, re-get
+				mapFile.get(thisTileSymbol);
+
+			if (x == 511) //if the last tile so must be a border tile
+				mapArray[arrayStorage] = Tile(x + 1, y + 1, '@');
+			else
+				mapArray[arrayStorage] = Tile(x + 1, y + 1, thisTileSymbol);
+			
 			arrayStorage++;
 		}
 	}
