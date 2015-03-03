@@ -30,7 +30,7 @@ int main()
 	
 	//window.setVerticalSyncEnabled(false);
 
-	MapMngr.LoadMap("maps/dungeon2.map"); //load the map
+	MapMngr.LoadMap("maps/maze1.map"); //load the map
 	sf::Clock FPSClock;
 	sf::Clock WorldTickClock;
 

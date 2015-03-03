@@ -19,25 +19,27 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, Tile mapToDraw[], int mapHeigh
 
 		for (int i = 0; i < arrayCount; i++)
 		{
+			if (i == 512)
+				std::cout << "hit" << std::endl;
 			if (currentX == mapWidth + 1)
 			{
+				circle.setPosition(zoomValue, currentY * zoomValue);
 				currentX = 1;
 				currentY += 1;
-				circle.setPosition(zoomValue, currentY * zoomValue);
 			}
 			else
 			{
-				currentX += 1;
 				circle.move(zoomValue, 0);
+				currentX += 1;
 			}
 
-			if (currentY == mapHeight - 1 || currentX == mapWidth + 1)
-			{ 
-				//if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * zoomValue, currentY * zoomValue))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
-				//	screen->draw(circle);
-			}
-			else
-			{
+			//if (currentY == mapHeight || currentX == mapWidth)
+			//{ 
+			//	//if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * zoomValue, currentY * zoomValue))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
+			//		//screen->draw(circle);
+			//}
+			//else
+			//{
 				switch (mapToDraw[i].checkSymbol())
 				{
 				case 'G':
@@ -49,7 +51,7 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, Tile mapToDraw[], int mapHeigh
 				case '@':
 				case 'O':
 				{
-					if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * zoomValue, currentY * zoomValue))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
+					//if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * zoomValue, currentY * zoomValue))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
 						screen->draw(circle);
 				}
 					break;
@@ -61,7 +63,7 @@ void MapDrawer::DrawMap(sf::RenderWindow* screen, Tile mapToDraw[], int mapHeigh
 				default:
 					break;
 				}
-			}
+			//}
 		}
 	}
 	ToggleRedraw();
