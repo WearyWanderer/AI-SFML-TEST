@@ -7,6 +7,7 @@ RTT_Node::RTT_Node()
 RTT_Node::RTT_Node(int x, int y)
 {
 	nodePos = sf::Vector2i(x, y);
+	nodeShape.setFillColor(sf::Color::Green);
 }
 
 

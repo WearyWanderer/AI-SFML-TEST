@@ -63,4 +63,17 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 		if (!MapDrwr.GetRedrawState())
 			MapDrwr.ToggleRedraw();
 	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		if (!leftMouseDown)
+		{
+			leftMouseDown = true;
+			Tree.SetNewRoot(targetWindow->mapPixelToCoords(sf::Mouse::getPosition()));
+		}
+	}
+	else
+	{
+		leftMouseDown = false;
+	}
 }

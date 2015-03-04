@@ -4,9 +4,11 @@
 #include <sfml\Window\Mouse.hpp>
 #include "MapDrawer.h"
 #include "ViewManager.h"
+#include "RTT_Tree.h"
 
 #define MapDrwr MapDrawer::getInstance()
 #define ViewMngr ViewManager::getInstance()
+#define Tree RTT_Tree::getInstance()
 
 class InputManager
 {
@@ -26,5 +28,7 @@ private:
 	// technique of deleting the methods we don't want.
 	InputManager(InputManager const&) = delete;
 	void operator=(InputManager const&) = delete;
+
+	bool leftMouseDown = false;
 };
 
