@@ -11,12 +11,13 @@ public:
 	RTT_Node(int x, int y);
 	~RTT_Node();
 
-	void DrawNode();
+	sf::Vector2f GetNodePos();
+	inline void SetNodePos(int x, int y){ nodePos.x = x; nodePos.y = y; }
+	inline void SetNodePos(sf::Vector2f newPos){ nodePos = newPos; }
 
 private:
 
-	sf::Vector2i nodePos;
-	sf::RectangleShape nodeShape = sf::RectangleShape(sf::Vector2f(2.5, 2.5));
-	std::vector<RTT_Node*> adjacentNodes;
+	sf::Vector2f nodePos;
+	
 };
 

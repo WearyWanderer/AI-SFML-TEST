@@ -9,13 +9,14 @@ class RTT_Tree
 public:
 	static RTT_Tree& getInstance()
 	{
-		static RTT_Tree instance(0,0);
+		static RTT_Tree instance(1,1);
 		// Instantiated on first use.
 		return instance;
 	}
 
 	void SetNewRoot(int x, int y);
 	void SetNewRoot(sf::Vector2f pos);
+	void DrawTree(sf::RenderWindow* screen);
 
 private:
 	RTT_Tree(int rootX, int rootY);

@@ -6,11 +6,14 @@ RTT_Node::RTT_Node()
 
 RTT_Node::RTT_Node(int x, int y)
 {
-	nodePos = sf::Vector2i(x, y);
-	nodeShape.setFillColor(sf::Color::Green);
+	nodePos = sf::Vector2f(x, y);
 }
-
 
 RTT_Node::~RTT_Node()
 {
+}
+
+sf::Vector2f RTT_Node::GetNodePos()
+{
+	return nodePos;
 }

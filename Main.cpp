@@ -15,11 +15,13 @@
 #include "MapDrawer.h"
 #include "InputManager.h"
 #include "ViewManager.h"
+#include "RTT_Tree.h"
 
 #define MapMngr MapLoader::getInstance()
 #define MapDrwr MapDrawer::getInstance()
 #define InputMngr InputManager::getInstance()
 #define ViewMngr ViewManager::getInstance()
+#define Tree RTT_Tree::getInstance()
 
 float getFPS(const sf::Time& time);
 
@@ -72,13 +74,16 @@ int main()
 		#pragma endregion
 
 		InputMngr.InputCycle(&window);
+		
 
 		if (MapDrwr.GetRedrawState())
 		{
 			window.clear();
 			MapDrwr.DrawMap(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth());
+			Tree.DrawTree(&window);
 			window.display();
 		}
+		
 		
 	}
 	return 0;
