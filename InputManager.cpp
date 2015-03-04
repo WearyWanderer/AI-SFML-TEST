@@ -69,11 +69,19 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 		if (!leftMouseDown)
 		{
 			leftMouseDown = true;
-			sf::Vector2i mousePos(sf::Mouse::getPosition(*targetWindow).x, sf::Mouse::getPosition(*targetWindow).y);
-			std::cout << mousePos.x << " X-Pos" << std::endl;
-			std::cout << mousePos.y << " Y-Pos" << std::endl;
-			//std::cout << "Viewport is " <<  << " " <<  << std::endl;
-			Tree.SetNewRoot(targetWindow->mapPixelToCoords(sf::Vector2i(mousePos.x / 2.5, mousePos.y / 2.5), ViewMngr.GetView()));
+
+			sf::Vector2i mousePos
+			(
+				(sf::Mouse::getPosition(*targetWindow).x + (targetWindow->getView().getCenter().x - (targetWindow->getView().getSize().x / 2))) / 2.5, 
+				(sf::Mouse::getPosition(*targetWindow).y + (targetWindow->getView().getCenter().y - (targetWindow->getView().getSize().y / 2))) / 2.5
+			);
+
+			#ifdef _DEBUG
+				std::cout << mousePos.x << " X-Pos" << std::endl;
+				std::cout << mousePos.y << " Y-Pos" << std::endl;
+			#endif
+
+			Tree.SetNewRoot(sf::Vector2f(mousePos.x, mousePos.y));
 			if (!MapDrwr.GetRedrawState())
 				MapDrwr.ToggleRedraw();
 		}
