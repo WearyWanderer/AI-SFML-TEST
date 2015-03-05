@@ -25,7 +25,8 @@ public:
 
 
 #pragma region TreeNodeLookup_Lines
-	RTT_Node* GetNearestNode(RTT_Node* searchingNode);
+	bool IfExistingNode(sf::Vector2i position);
+	RTT_Node* GetNearestNode(RTT_Node* searchingNode, int maxDistance);
 	bool BuildLine(RTT_Node* node1, RTT_Node* node2);
 #pragma endregion
 
@@ -38,6 +39,8 @@ private:
 
 	RTT_Node rootNode;
 	std::vector<RTT_Node> nodeTree;
+	std::vector<RTT_Node*> potentialNodes; //used in the function of getting the nearest nodes, rather than calling ever frame, just have as a member variable
+
 	sf::Texture treeTexture;
 	sf::Sprite treeSprite;
 	

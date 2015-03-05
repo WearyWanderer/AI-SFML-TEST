@@ -34,7 +34,7 @@ int main()
 	//window.setVerticalSyncEnabled(false);
 
 	srand(time(NULL));
-	MapMngr.LoadMap("maps/testMap.map"); //load the map
+	MapMngr.LoadMap("maps/dungeon2.map"); //load the map
 	sf::Clock WorldTickClock;
 
 	sf::Clock clock;
