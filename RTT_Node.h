@@ -3,6 +3,7 @@
 #include <sfml\System.hpp>
 #include <sfml\Graphics.hpp>
 #include <vector>
+#include "MapLoader.h"
 
 class RTT_Node
 {
@@ -12,8 +13,8 @@ public:
 	~RTT_Node();
 
 	sf::Vector2f GetNodePos();
-	inline void SetNodePos(int x, int y){ nodePos.x = x; nodePos.y = y; }
-	inline void SetNodePos(sf::Vector2f newPos){ nodePos = newPos; }
+	void SetNodePos(int x, int y, Tile mapInfo[]);
+	void SetNodePos(sf::Vector2f newPos, Tile mapInfo[]);
 
 private:
 
