@@ -52,6 +52,8 @@ void MapLoader::LoadMap(std::string filepath)
 			arrayStorage++;
 		}
 	}
+
+	boundsRect = sf::IntRect(1, 1, mapWidth, mapHeight);
 }
 
 

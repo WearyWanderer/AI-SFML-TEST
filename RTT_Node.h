@@ -13,8 +13,8 @@ public:
 	~RTT_Node();
 
 	sf::Vector2f GetNodePos();
-	void SetNodePos(int x, int y, Tile mapInfo[]);
-	void SetNodePos(sf::Vector2f newPos, Tile mapInfo[]);
+	void SetNodePos(int x, int y, Tile mapInfo[], sf::IntRect boundsRect);
+	void SetNodePos(sf::Vector2f newPos, Tile mapInfo[], sf::IntRect boundsRect);
 
 private:
 

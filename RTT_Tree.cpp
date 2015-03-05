@@ -8,12 +8,12 @@ RTT_Tree::RTT_Tree(int rootX, int rootY)
 
 void RTT_Tree::SetNewRoot(int x, int y)
 {
-	rootNode.SetNodePos(sf::Vector2f(x, y), MapMngr.GetMap());
+	rootNode.SetNodePos(sf::Vector2f(x, y), MapMngr.GetMap(), MapMngr.GetMapRect());
 }
 
 void RTT_Tree::SetNewRoot(sf::Vector2f pos)
 {
-	rootNode.SetNodePos(pos, MapMngr.GetMap());
+	rootNode.SetNodePos(pos, MapMngr.GetMap(), MapMngr.GetMapRect());
 }
 
 void RTT_Tree::DrawTree(sf::RenderWindow* screen)
