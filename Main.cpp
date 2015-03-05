@@ -28,7 +28,7 @@ float getFPS(const sf::Time& time);
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test");
+	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test", sf::Style::Close);
 	//window.setFramerateLimit(0);
 	
 	//window.setVerticalSyncEnabled(false);
@@ -76,14 +76,14 @@ int main()
 				FPSCounter++;
 		#pragma endregion
 
-		if (TicksPerFrame >= 30)
-			InputMngr.InputCycle(&window);
-		
+		window.clear(); //clear the window
+		MapDrwr.DrawMap(&window); //draw the map texture
 
-		window.clear();
-		MapDrwr.DrawMap(&window);
-		Tree.DrawTree(&window);
-		window.display();
+		if (TicksPerFrame >= 30)
+			InputMngr.InputCycle(&window); //take in inputs
+
+		Tree.DrawTree(&window); //draw the tree texture
+		window.display(); //call the display
 		
 		
 	}

@@ -17,8 +17,8 @@ public:
 		return instance;
 	}
 
-	void SetNewRoot(int x, int y);
-	void SetNewRoot(sf::Vector2i pos);
+	void SetNewRoot(int x, int y, sf::RenderWindow* screen);
+	void SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen);
 	void GenerateNodes(int nodeLength, sf::Vector2i goalNode);
 	void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);

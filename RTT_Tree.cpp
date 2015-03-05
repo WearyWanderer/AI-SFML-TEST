@@ -8,14 +8,18 @@ RTT_Tree::RTT_Tree(int rootX, int rootY)
 	treeSprite.setTexture(treeTexture);
 }
 
-void RTT_Tree::SetNewRoot(int x, int y)
+void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
 {
 	rootNode.SetNodePos(sf::Vector2i(x, y), MapMngr.GetMap(), MapMngr.GetMapRect());
+	nodeTree.clear(); //empty the old tree
+	InitTreeTexture(screen);
 }
 
-void RTT_Tree::SetNewRoot(sf::Vector2i pos)
+void RTT_Tree::SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen)
 {
 	rootNode.SetNodePos(pos, MapMngr.GetMap(), MapMngr.GetMapRect());
+	nodeTree.clear(); //empty the old tree
+	InitTreeTexture(screen);
 }
 
 void RTT_Tree::GenerateNodes(int nodeLength, sf::Vector2i goalNode)
