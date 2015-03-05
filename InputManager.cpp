@@ -12,7 +12,7 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 		//MapDrwr.AlterCameraOffset(sf::Vector2i(-1, 0));
 		ViewMngr.AlterView(1, 0);
 		targetWindow->setView(ViewMngr.GetView());
-		MapDrwr.mapSprite.move(1, 0);
+		//MapDrwr.mapSprite.move(1, 0);
 		if (!MapDrwr.GetRedrawState())
 			MapDrwr.ToggleRedraw();
 	}
@@ -110,8 +110,7 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 		#endif
 
 			Tree.GenerateNodes(2, mousePos);
-			if (!MapDrwr.GetRedrawState())
-				MapDrwr.ToggleRedraw();
+			Tree.InitTreeTexture(targetWindow);
 		}
 	}
 	else

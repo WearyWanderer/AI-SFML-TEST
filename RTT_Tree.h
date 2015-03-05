@@ -20,6 +20,7 @@ public:
 	void SetNewRoot(int x, int y);
 	void SetNewRoot(sf::Vector2i pos);
 	void GenerateNodes(int nodeLength, sf::Vector2i goalNode);
+	void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);
 
 

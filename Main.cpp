@@ -34,8 +34,7 @@ int main()
 	//window.setVerticalSyncEnabled(false);
 
 	srand(time(NULL));
-	MapMngr.LoadMap("maps/maze1.map"); //load the map
-	sf::Clock FPSClock;
+	MapMngr.LoadMap("maps/testMap.map"); //load the map
 	sf::Clock WorldTickClock;
 
 	sf::Clock clock;
@@ -77,8 +76,8 @@ int main()
 				FPSCounter++;
 		#pragma endregion
 
-	
-		InputMngr.InputCycle(&window);
+		if (TicksPerFrame >= 30)
+			InputMngr.InputCycle(&window);
 		
 
 		window.clear();
@@ -89,9 +88,4 @@ int main()
 		
 	}
 	return 0;
-}
-
-float getFPS(const sf::Time& time)
-{
-	return (1000000.0f / time.asMicroseconds());
 }
