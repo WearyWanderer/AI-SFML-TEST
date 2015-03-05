@@ -5,6 +5,8 @@
 #include <vector>
 #include "MapLoader.h"
 
+#define MapMngr MapLoader::getInstance()
+
 class RTT_Node
 {
 public:
@@ -12,13 +14,27 @@ public:
 	RTT_Node(int x, int y);
 	~RTT_Node();
 
-	sf::Vector2f GetNodePos();
-	void SetNodePos(int x, int y, Tile mapInfo[], sf::IntRect boundsRect);
-	void SetNodePos(sf::Vector2f newPos, Tile mapInfo[], sf::IntRect boundsRect);
+	sf::Vector2i GetNodePos();
+	bool SetNodePos(int x, int y, Tile mapInfo[], sf::IntRect boundsRect);
+	bool SetNodePos(sf::Vector2i newPos, Tile mapInfo[], sf::IntRect boundsRect);
+	inline bool isTarget(){ return isTargetNode; }
+	inline void SetTargetNode(){ isTargetNode = true; }
+
+#pragma region OverloadForSorting
+	bool operator < (const RTT_Node& str) const
+	{
+		return (nodePos.x < str.nodePos.x);
+	}
+	bool operator << (const RTT_Node& str) const
+	{
+		return (nodePos.y < str.nodePos.y);
+	}
+#pragma endregion
 
 private:
 
-	sf::Vector2f nodePos;
+	sf::Vector2i nodePos;
+	bool isTargetNode = false;
 	
 };
 

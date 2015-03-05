@@ -6,47 +6,59 @@ RTT_Node::RTT_Node()
 
 RTT_Node::RTT_Node(int x, int y)
 {
-	nodePos = sf::Vector2f(x, y);
+	nodePos = sf::Vector2i(x, y);
 }
 
 RTT_Node::~RTT_Node()
 {
 }
 
-sf::Vector2f RTT_Node::GetNodePos()
+sf::Vector2i RTT_Node::GetNodePos()
 {
 	return nodePos;
 }
 
-void RTT_Node::SetNodePos(int x, int y, Tile mapInfo[], sf::IntRect boundsRect)
+bool RTT_Node::SetNodePos(int x, int y, Tile mapInfo[], sf::IntRect boundsRect)
 { 
 	if (boundsRect.contains(sf::Vector2i(x,y)))
 	{
-		int arrayPoint = ((y * 512) + x) - 513;
+		int arrayPoint = ((y * MapMngr.GetMapHeight()) + x) - (MapMngr.GetMapWidth() + 1);
 		if (mapInfo[arrayPoint].tileSymbol == '@')
 		{
-			std::cout << "Hit Collision Wall" << std::endl;
+			#ifdef _DEBUG
+				std::cout << "Hit Collision Wall" << std::endl;
+			#endif
+			return false;
 		}
 		else
 		{
 			nodePos.x = x;
 			nodePos.y = y;
+			return true;
 		}
 	}
 }
 
-void RTT_Node::SetNodePos(sf::Vector2f newPos, Tile mapInfo[], sf::IntRect boundsRect)
+bool RTT_Node::SetNodePos(sf::Vector2i newPos, Tile mapInfo[], sf::IntRect boundsRect)
 { 
-	if (boundsRect.contains((sf::Vector2i)newPos))
+	if (boundsRect.contains(newPos))
 	{
-		int arrayPoint = ((newPos.y * 512) + newPos.x) - 513;
+		int arrayPoint = ((newPos.y * MapMngr.GetMapHeight()) + newPos.x) - (MapMngr.GetMapWidth() + 1);
 		if (mapInfo[arrayPoint].tileSymbol == '@')
 		{
-			std::cout << mapInfo[arrayPoint].x << std::endl;
-			std::cout << mapInfo[arrayPoint].y << std::endl;
-			std::cout << "Hit Collision Wall" << std::endl;
+			#ifdef _DEBUG
+				std::cout << mapInfo[arrayPoint].x << std::endl;
+				std::cout << mapInfo[arrayPoint].y << std::endl;
+				std::cout << "Hit Collision Wall" << std::endl;
+				return false;
+			#endif
 		}
 		else
+		{
 			nodePos = newPos;
+			return true;
+		}
 	}
+	else
+		return false;
 }

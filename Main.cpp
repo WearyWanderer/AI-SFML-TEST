@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <string>
+#include <time.h>
 #include <SFML/Graphics.hpp>
 
 #include "MapLoader.h"
@@ -32,6 +33,7 @@ int main()
 	
 	//window.setVerticalSyncEnabled(false);
 
+	srand(time(NULL));
 	MapMngr.LoadMap("maps/maze1.map"); //load the map
 	sf::Clock FPSClock;
 	sf::Clock WorldTickClock;
@@ -45,6 +47,8 @@ int main()
 	ViewMngr.SetView(sf::FloatRect(0, 0, 960, 720));
 
 	window.setView(ViewMngr.GetView());
+
+	MapDrwr.InitMapTexture(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth()); //create the map into a texture
 
 	while (window.isOpen())
 	{
@@ -73,16 +77,14 @@ int main()
 				FPSCounter++;
 		#pragma endregion
 
+	
 		InputMngr.InputCycle(&window);
 		
 
-		if (MapDrwr.GetRedrawState())
-		{
-			window.clear();
-			MapDrwr.DrawMap(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth());
-			Tree.DrawTree(&window);
-			window.display();
-		}
+		window.clear();
+		MapDrwr.DrawMap(&window);
+		Tree.DrawTree(&window);
+		window.display();
 		
 		
 	}

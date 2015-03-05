@@ -3,68 +3,63 @@
 
 MapDrawer::MapDrawer()
 {
+	texture.create(960, 720);
+	mapSprite.setTexture(texture);
 }
 
-void MapDrawer::DrawMap(sf::RenderWindow* screen, Tile mapToDraw[], int mapHeight, int mapWidth)
+void MapDrawer::InitMapTexture(sf::RenderWindow* screen, Tile mapToDraw[], int mapHeight, int mapWidth)
 {
-	if (needsRedraw)
+	float zoomValue = GetZoomValue(currentZoom);
+	int currentX = 1;
+	int currentY = 1;
+	int arrayCount = mapHeight * mapWidth;
+	sf::RectangleShape circle(sf::Vector2f(zoomValue, zoomValue));
+	circle.setFillColor(sf::Color::Blue);
+	circle.setPosition(zoomValue, zoomValue);
+
+	for (int i = 0; i < arrayCount; i++)
 	{
-		float zoomValue = GetZoomValue(currentZoom);
-		int currentX = 1;
-		int currentY = 1;
-		int arrayCount = mapHeight * mapWidth;
-		sf::RectangleShape circle(sf::Vector2f(zoomValue, zoomValue));
-		circle.setFillColor(sf::Color::Blue);
-		circle.setPosition(zoomValue, zoomValue);
-
-		for (int i = 0; i < arrayCount; i++)
+		if (mapToDraw[i].getPos().x == 1 && i != 0)
 		{
-			if (mapToDraw[i].getPos().x == 1 && i != 0)
-			{
-				currentX = 1;
-				currentY += 1;
-				circle.setPosition(zoomValue, currentY * zoomValue);
-			}
-			else
-			{
-				circle.move(zoomValue, 0);
-				currentX += 1;
-			}
+			currentX = 1;
+			currentY += 1;
+			circle.setPosition(zoomValue, currentY * zoomValue);
+		}
+		else
+		{
+			circle.move(zoomValue, 0);
+			currentX += 1;
+		}
+		switch (mapToDraw[i].checkSymbol())
+		{
+		case 'G':
+		case '.': //walkable terrain, draw nothing
+		{
 
-			//if (currentY == mapHeight || currentX == mapWidth)
-			//{ 
-			//	//if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * zoomValue, currentY * zoomValue))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
-			//		//screen->draw(circle);
-			//}
-			//else
-			//{
-				switch (mapToDraw[i].checkSymbol())
-				{
-				case 'G':
-				case '.': //walkable terrain, draw nothing
-				{
+		}
+			break;
+		case '@': //impassable terrain
+		case 'O':
+		{
+			screen->draw(circle);
+		}
+			break;
+		case 'T':
+		{
 
-				}
-					break;
-				case '@':
-				case 'O':
-				{
-					//if (!ViewMngr.IsInsideView(sf::Vector2f(currentX * zoomValue, currentY * zoomValue))) // if it's outside of what the current screen's boundaries are, don't bother trying to draw
-						screen->draw(circle);
-				}
-					break;
-				case 'T':
-				{
-
-				}
-					break;
-				default:
-					break;
-				}
-			//}
+		}
+			break;
+		default:
+			break;
 		}
 	}
 	ToggleRedraw();
+	texture.update(*screen);
+}
+
+void MapDrawer::DrawMap(sf::RenderWindow* screen)
+{
+		screen->draw(mapSprite);
 }
 
 float MapDrawer::GetZoomValue(int currentZoom)

@@ -30,5 +30,6 @@ private:
 	void operator=(InputManager const&) = delete;
 
 	bool leftMouseDown = false;
+	bool rightMouseDown = false;
 };
 

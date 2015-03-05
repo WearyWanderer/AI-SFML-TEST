@@ -29,7 +29,8 @@ public:
 	}
 
 	#pragma region DrawingMap
-		void DrawMap(sf::RenderWindow* screen, Tile* mapToDraw, int mapHeight, int mapWidth);
+		void MapDrawer::InitMapTexture(sf::RenderWindow* screen, Tile mapToDraw[], int mapHeight, int mapWidth);
+		void DrawMap(sf::RenderWindow* screen);
 		inline void ToggleRedraw(){ needsRedraw = !needsRedraw; }
 		inline bool GetRedrawState(){ return needsRedraw; }
 	#pragma endregion
@@ -37,6 +38,7 @@ public:
 	inline void SetZoom(int zoomToSet){ currentZoom = zoomToSet; }
 	float GetZoomValue(int currentZoom);
 
+	sf::Sprite mapSprite;
 private:
 	MapDrawer();
 
@@ -46,5 +48,8 @@ private:
 
 	bool needsRedraw = true;
 	int currentZoom = Zoomx1;
+
+	sf::Texture texture;
+	
 };
 
