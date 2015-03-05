@@ -132,11 +132,6 @@ RTT_Node* RTT_Tree::GetNearestNode(RTT_Node* searchingNode, int maxDistance)
 		}
 	}
 	std::sort(potentialNodes.begin(), potentialNodes.end(), SortTree); //sort the potential nodes into a checkable order
-	/*for each (RTT_Node* node in potentialNodes)
-	{
-		float distance = sqrt((node->GetNodePos().x - searchingNode->GetNodePos().x) * (node->GetNodePos().x - searchingNode->GetNodePos().x) +
-							  (node->GetNodePos().y - searchingNode->GetNodePos().y) * (node->GetNodePos().y - searchingNode->GetNodePos().y));
-	}*/
 	//std::vector<RTT_Node>::iterator nearestIterator; //create an iterator to retrieve the correct node
 	if (!potentialNodes.empty())
 	{

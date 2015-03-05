@@ -20,14 +20,14 @@ sf::Vector2i RTT_Node::GetNodePos()
 
 bool RTT_Node::SetNodePos(int x, int y, Tile mapInfo[], sf::IntRect boundsRect)
 { 
-	if (boundsRect.contains(sf::Vector2i(x, y)))
+	if (boundsRect.contains(sf::Vector2i(x,y)))
 	{
 		int arrayPoint = ((y * MapMngr.GetMapHeight()) + x) - (MapMngr.GetMapWidth() + 1);
 		if (mapInfo[arrayPoint].tileSymbol == '@')
 		{
-#ifdef _DEBUG
-			std::cout << "Hit Collision Wall" << std::endl;
-#endif
+			#ifdef _DEBUG
+				std::cout << "Hit Collision Wall" << std::endl;
+			#endif
 			return false;
 		}
 		else
@@ -37,8 +37,6 @@ bool RTT_Node::SetNodePos(int x, int y, Tile mapInfo[], sf::IntRect boundsRect)
 			return true;
 		}
 	}
-	else
-		return false;
 }
 
 bool RTT_Node::SetNodePos(sf::Vector2i newPos, Tile mapInfo[], sf::IntRect boundsRect)
