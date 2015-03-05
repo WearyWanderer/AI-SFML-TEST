@@ -93,7 +93,7 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 			std::cout << mousePos.y << " Y-Pos" << std::endl;
 		#endif
 
-			Tree.GenerateNodes(1, mousePos);
+			//Tree.GenerateNodes(1, mousePos);
 			Tree.InitTreeTexture(targetWindow);
 		}
 	}
