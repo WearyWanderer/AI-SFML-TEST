@@ -75,7 +75,12 @@ int main()
 		
 		MapDrwr.DrawMap(&window); //draw the map texture
 		//if (TicksPerFrame >= 30)
-			InputMngr.InputCycle(&window); //take in inputs
+		InputMngr.InputCycle(&window); //take in inputs
+		if (Tree.IfDrawing())
+		{
+			Tree.GenerateNode(10, InputMngr.lastGoalNode);
+			Tree.InitTreeTexture(&window);
+		}
 		Tree.DrawTree(&window); //draw the tree texture
 		
 		window.display(); //call the display	

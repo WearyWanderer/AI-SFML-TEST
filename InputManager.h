@@ -21,7 +21,7 @@ public:
 	}
 
 	void InputCycle(sf::RenderWindow* targetWindow);
-
+	sf::Vector2i lastGoalNode;
 private:
 	InputManager();
 
@@ -31,5 +31,6 @@ private:
 
 	bool leftMouseDown = false;
 	bool rightMouseDown = false;
+	
 };
 

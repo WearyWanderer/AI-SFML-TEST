@@ -12,14 +12,14 @@ class RTT_Tree
 public:
 	static RTT_Tree& getInstance()
 	{
-		static RTT_Tree instance(-100,-100);
+		static RTT_Tree instance(2,2);
 		// Instantiated on first use.
 		return instance;
 	}
 
 	void SetNewRoot(int x, int y, sf::RenderWindow* screen);
 	void SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen);
-	void GenerateNodes(int nodeLength, sf::Vector2i goalNode);
+	void GenerateNode(int nodeLength, sf::Vector2i goalNode);
 	void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);
 	inline void SetZoom(int zoomToSet){ treeSprite.setScale(zoomToSet, zoomToSet); }
@@ -28,6 +28,9 @@ public:
 	bool IfExistingNode(sf::Vector2i position);
 	RTT_Node* GetNearestNode(RTT_Node* searchingNode, int maxDistance);
 	bool BuildLine(RTT_Node* node1, RTT_Node* node2);
+	inline void BeginDrawing(){ continueDrawing = true; targetReached = false; }
+	inline bool IfDrawing(){ return continueDrawing; }
+	int manhattanDistance(sf::Vector2i pos, sf::Vector2i pos2);
 #pragma endregion
 
 private:
@@ -40,6 +43,8 @@ private:
 	RTT_Node rootNode;
 	std::vector<RTT_Node> nodeTree;
 	std::vector<RTT_Node*> potentialNodes; //used in the function of getting the nearest nodes, rather than calling ever frame, just have as a member variable
+	bool targetReached = true;
+	bool continueDrawing = false;
 
 	sf::Texture treeTexture;
 	sf::Sprite treeSprite;
