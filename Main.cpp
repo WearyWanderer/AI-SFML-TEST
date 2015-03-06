@@ -79,7 +79,7 @@ int main()
 		InputMngr.InputCycle(&window); //take in inputs
 		if (Tree.IfDrawing())
 		{
-			Tree.GenerateNode(5);
+			Tree.GenerateNode(12);
 			Tree.InitTreeTexture(&window);
 		}
 		Tree.DrawTree(&window); //draw the tree texture

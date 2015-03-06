@@ -77,7 +77,7 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 
 void RTT_Tree::GenerateNode(int nodeLength)
 {
-		for (int i = 0; i <= 10; i++)
+		for (int i = 0; i <= 50; i++)
 		{
 			RTT_Node newNode(0, 0);
 			sf::Vector2i randomPoint = sf::Vector2i(rand() % nodeLength * 2 + (previousNode.GetNodePos().x - (nodeLength)) + 1, rand() % nodeLength * 2 + (previousNode.GetNodePos().y - (nodeLength)) + 1); //random point on the map
@@ -114,6 +114,10 @@ void RTT_Tree::GenerateNode(int nodeLength)
 						}
 					}
 				}
+			}
+			else
+			{
+				previousNode = nodeTree[rand() % nodeTree.size()];
 			}
 		}
 }
@@ -159,6 +163,8 @@ void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen) //add the RTT_Tree to t
 	//treeTexture.copyToImage().saveToFile("treeDrawn.png");
 	treeSprite.setTexture(treeTexture);
 	treeSprite.setPosition(0, 0);
+
+	delete[] pixels;
 }
 
 void RTT_Tree::DrawTree(sf::RenderWindow* screen) //add the RTT_Tree to the draw buffer
