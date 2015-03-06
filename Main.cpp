@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <time.h>
+#include <ctime>
 #include <SFML/Graphics.hpp>
 
 #include "MapLoader.h"
@@ -29,8 +30,8 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test");
 	//window.setFramerateLimit(0);
 	
-	srand(time(NULL));
-	MapMngr.LoadMap("maps/dungeon.map"); //load the map
+	srand(std::time(0));
+	MapMngr.LoadMap("maps/maze1.map"); //load the map
 	sf::Clock WorldTickClock;
 
 	sf::Clock clock;
