@@ -28,10 +28,12 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 	{
 		goalNode_.SetTargetNode();
 		nodeTree.push_back(goalNode_); //set this as the target node to reach
+		previousNode = rootNode;
+
 		for (int i = 0; i <= 10; i++)
 		{
 			RTT_Node newNode(0, 0);
-			sf::Vector2i randomPoint = sf::Vector2i(rand() % MapMngr.GetMapWidth() + 1, rand() % MapMngr.GetMapHeight() + 1); //random point on the map
+			sf::Vector2i randomPoint = sf::Vector2i(rand() % nodeLength + (previousNode.GetNodePos().x - (nodeLength / 2)) + 1, rand() % nodeLength + (previousNode.GetNodePos().y - (nodeLength / 2)) + 1); //random point on the map
 			if (!IfExistingNode(randomPoint) || (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y)) //if an existing node is not at this position and it is not the target node
 			{
 				if (newNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
@@ -47,7 +49,7 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 						else
 						{
 							nodeTree.push_back(newNode);
-							//previousNode = newNode; //make this node become the next node to base the search off
+							previousNode = newNode; //make this node become the next node to base the search off
 						}
 					}
 					else
@@ -57,12 +59,60 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 							targetReached = true;
 							continueDrawing = false;
 						}
+						else
+						{
+							nodeTree.push_back(newNode);
+							previousNode = newNode; //make this node become the next node to base the search off
+						}
 						//if (BuildLine(nearestNode, &newNode))
 					}
 				}
 			}
 		}
 	}
+}
+
+void RTT_Tree::GenerateNode(int nodeLength)
+{
+		for (int i = 0; i <= 10; i++)
+		{
+			RTT_Node newNode(0, 0);
+			sf::Vector2i randomPoint = sf::Vector2i(rand() % nodeLength + (previousNode.GetNodePos().x - (nodeLength / 2)) + 1, rand() % nodeLength + (previousNode.GetNodePos().y - (nodeLength / 2)) + 1); //random point on the map
+			if (!IfExistingNode(randomPoint) || (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y)) //if an existing node is not at this position and it is not the target node
+			{
+				if (newNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
+				{
+					RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
+					if (nearestNode == nullptr)
+					{
+						if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
+						{
+							targetReached = true;
+							continueDrawing = false;
+						}
+						else
+						{
+							nodeTree.push_back(newNode);
+							previousNode = newNode; //make this node become the next node to base the search off
+						}
+					}
+					else
+					{
+						if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
+						{
+							targetReached = true;
+							continueDrawing = false;
+						}
+						else
+						{
+							nodeTree.push_back(newNode);
+							previousNode = newNode; //make this node become the next node to base the search off
+						}
+						//if (BuildLine(nearestNode, &newNode))
+					}
+				}
+			}
+		}
 }
 
 void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen) //add the RTT_Tree to the draw buffer

@@ -20,6 +20,7 @@ public:
 	void SetNewRoot(int x, int y, sf::RenderWindow* screen);
 	void SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen);
 	void GenerateNode(int nodeLength, sf::Vector2i goalNode);
+	void RTT_Tree::GenerateNode(int nodeLength);
 	void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);
 	inline void SetZoom(int zoomToSet){ treeSprite.setScale(zoomToSet, zoomToSet); }
@@ -41,6 +42,7 @@ private:
 	void operator=(RTT_Tree const&) = delete;
 
 	RTT_Node rootNode;
+	RTT_Node previousNode;
 	std::vector<RTT_Node> nodeTree;
 	std::vector<RTT_Node*> potentialNodes; //used in the function of getting the nearest nodes, rather than calling ever frame, just have as a member variable
 	bool targetReached = true;
