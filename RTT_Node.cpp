@@ -22,7 +22,7 @@ bool RTT_Node::SetNodePos(int x, int y, Tile mapInfo[], sf::IntRect boundsRect)
 { 
 	if (boundsRect.contains(sf::Vector2i(x,y)))
 	{
-		int arrayPoint = ((y * MapMngr.GetMapWidth()) + x);
+		int arrayPoint = ((y * MapMngr.GetMapHeight()) + x) - (MapMngr.GetMapWidth() + 1);
 		if (mapInfo[arrayPoint].tileSymbol == '@')
 		{
 			#ifdef _DEBUG

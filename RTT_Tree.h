@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <ctime>
 #include <sfml\Graphics.hpp>
 #include "RTT_Node.h"
 #include "MapLoader.h"
