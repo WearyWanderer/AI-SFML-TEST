@@ -227,7 +227,6 @@ bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 
 	lineTexture.update(lineTexturePixels);
 	lineSprite.setTexture(lineTexture);
-	screen->draw(lineSprite);
 	return true;
 }
 

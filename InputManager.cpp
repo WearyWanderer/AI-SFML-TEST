@@ -110,4 +110,9 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 	{
 		rightMouseDown = false;
 	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		Tree.StopDrawing();
+	}
 }

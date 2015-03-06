@@ -83,6 +83,7 @@ int main()
 			Tree.InitTreeTexture(&window);
 		}
 		Tree.DrawTree(&window); //draw the tree texture
+		window.draw(Tree.GetLineSprite());
 		
 		window.display(); //call the display	
 	}
