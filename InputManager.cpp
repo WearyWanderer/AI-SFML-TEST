@@ -41,14 +41,20 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 	{
 		//MapDrwr.ResetCameraOffset();
-		MapDrwr.SetZoom(1);
-		targetWindow->setView(ViewMngr.GetView());
+		MapDrwr.SetZoom(Zoomx1);
+		Tree.SetZoom(Zoomx1);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 	{
 		//MapDrwr.ResetCameraOffset();
-		MapDrwr.SetZoom(2);
-		targetWindow->setView(ViewMngr.GetView());
+		MapDrwr.SetZoom(Zoomx2);
+		Tree.SetZoom(Zoomx2);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+	{
+		//MapDrwr.ResetCameraOffset();
+		MapDrwr.SetZoom(Zoomx3);
+		Tree.SetZoom(Zoomx3);
 	}
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -59,8 +65,8 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 
 			sf::Vector2i mousePos
 			(
-				(sf::Mouse::getPosition(*targetWindow).x + (targetWindow->getView().getCenter().x - (targetWindow->getView().getSize().x / 2))) / 2.5, 
-				(sf::Mouse::getPosition(*targetWindow).y + (targetWindow->getView().getCenter().y - (targetWindow->getView().getSize().y / 2))) / 2.5
+				(sf::Mouse::getPosition(*targetWindow).x + (targetWindow->getView().getCenter().x - (targetWindow->getView().getSize().x / 2))) / MapDrwr.GetZoomValue(), 
+				(sf::Mouse::getPosition(*targetWindow).y + (targetWindow->getView().getCenter().y - (targetWindow->getView().getSize().y / 2))) / MapDrwr.GetZoomValue()
 			);
 
 			#ifdef _DEBUG
@@ -84,8 +90,8 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 
 			sf::Vector2i mousePos
 				(
-				(sf::Mouse::getPosition(*targetWindow).x + (targetWindow->getView().getCenter().x - (targetWindow->getView().getSize().x / 2))) / 2.5,
-				(sf::Mouse::getPosition(*targetWindow).y + (targetWindow->getView().getCenter().y - (targetWindow->getView().getSize().y / 2))) / 2.5
+				(sf::Mouse::getPosition(*targetWindow).x + (targetWindow->getView().getCenter().x - (targetWindow->getView().getSize().x / 2))) / MapDrwr.GetZoomValue(),
+				(sf::Mouse::getPosition(*targetWindow).y + (targetWindow->getView().getCenter().y - (targetWindow->getView().getSize().y / 2))) / MapDrwr.GetZoomValue()
 				);
 
 		#ifdef _DEBUG

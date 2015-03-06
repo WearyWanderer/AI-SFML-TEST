@@ -15,7 +15,8 @@
 enum zoomLevels
 {
 	Zoomx1 = 1,
-	Zoomx2 = 2
+	Zoomx2 = 2,
+	Zoomx3 = 3
 };
 
 class MapDrawer
@@ -35,8 +36,8 @@ public:
 		inline bool GetRedrawState(){ return needsRedraw; }
 	#pragma endregion
 
-	inline void SetZoom(int zoomToSet){ currentZoom = zoomToSet; }
-	float GetZoomValue(int currentZoom);
+	inline void SetZoom(int zoomToSet){ mapSprite.setScale(zoomToSet, zoomToSet); currentZoom = zoomToSet; }
+	inline int GetZoomValue(){ return currentZoom; };
 
 	sf::Sprite mapSprite;
 private:

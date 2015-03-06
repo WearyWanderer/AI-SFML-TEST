@@ -5,7 +5,6 @@ RTT_Tree::RTT_Tree(int rootX, int rootY)
 {
 	rootNode = RTT_Node(rootX, rootY);
 	treeTexture.create(960, 720);
-	treeSprite.setTexture(treeTexture);
 }
 
 void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
@@ -75,28 +74,45 @@ void RTT_Tree::GenerateNodes(int nodeLength, sf::Vector2i goalNode)
 
 void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen) //add the RTT_Tree to the draw buffer
 {
-	sf::RectangleShape nodeShape(sf::Vector2f(3.5f, 3.5f));
-	nodeShape.setFillColor(sf::Color::Green);
-	nodeShape.setPosition(rootNode.GetNodePos().x * 2.5f, rootNode.GetNodePos().y * 2.5f);
-	screen->draw(nodeShape);
+	treeTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
+
+	sf::Uint8* pixels = new sf::Uint8[MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4];
+
+	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++)
+	{
+		pixels[i] = 0;
+	}
+
+	int pixelArrayPos = (((rootNode.GetNodePos().y * MapMngr.GetMapWidth()) + rootNode.GetNodePos().x) * 4);
+	pixels[pixelArrayPos] = 255;
+	pixels[pixelArrayPos + 1] = 0;
+	pixels[pixelArrayPos + 2] = 0;
+	pixels[pixelArrayPos + 3] = 255;
 
 	for each (RTT_Node i in nodeTree)
 	{
-		if (i.isTarget())
+		if (i.isTarget()) // if target draw red
 		{
-			nodeShape.setFillColor(sf::Color::Red);
-			nodeShape.setPosition(i.GetNodePos().x * 2.5f, i.GetNodePos().y * 2.5f);
-			screen->draw(nodeShape);
-			nodeShape.setFillColor(sf::Color::Green);
+			int pixelArrayPos = (((i.GetNodePos().y * MapMngr.GetMapWidth()) + i.GetNodePos().x) * 4);
+			pixels[pixelArrayPos] = 255;
+			pixels[pixelArrayPos + 1] = 0;
+			pixels[pixelArrayPos + 2] = 0;
+			pixels[pixelArrayPos + 3] = 255;
 		}
 		else
 		{
-			nodeShape.setPosition(i.GetNodePos().x * 2.5f, i.GetNodePos().y * 2.5f);
-			screen->draw(nodeShape);
+			int pixelArrayPos = (((i.GetNodePos().y * MapMngr.GetMapWidth()) + i.GetNodePos().x) * 4);
+			pixels[pixelArrayPos] = 0;
+			pixels[pixelArrayPos + 1] = 255;
+			pixels[pixelArrayPos + 2] = 0;
+			pixels[pixelArrayPos + 3] = 0;
 		}
-
 	}
-	treeTexture.update(*screen);
+
+	treeTexture.update(pixels);
+	treeTexture.copyToImage().saveToFile("treeDrawn.png");
+	treeSprite.setTexture(treeTexture);
+	treeSprite.setPosition(0, 0);
 }
 
 void RTT_Tree::DrawTree(sf::RenderWindow* screen) //add the RTT_Tree to the draw buffer

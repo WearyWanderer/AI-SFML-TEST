@@ -22,7 +22,7 @@ public:
 	void GenerateNodes(int nodeLength, sf::Vector2i goalNode);
 	void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);
-
+	inline void SetZoom(int zoomToSet){ treeSprite.setScale(zoomToSet, zoomToSet); }
 
 #pragma region TreeNodeLookup_Lines
 	bool IfExistingNode(sf::Vector2i position);

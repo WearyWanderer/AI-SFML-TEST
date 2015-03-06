@@ -1,83 +1,75 @@
 #include "MapDrawer.h"
 
-
 MapDrawer::MapDrawer()
 {
-	texture.create(960, 720);
-	mapSprite.setTexture(texture);
 }
 
 void MapDrawer::InitMapTexture(sf::RenderWindow* screen, Tile mapToDraw[], int mapHeight, int mapWidth)
 {
-	float zoomValue = GetZoomValue(currentZoom);
-	int currentX = 1;
-	int currentY = 1;
-	int arrayCount = mapHeight * mapWidth;
-	sf::RectangleShape circle(sf::Vector2f(zoomValue, zoomValue));
-	circle.setFillColor(sf::Color::Blue);
-	circle.setPosition(zoomValue, zoomValue);
+	texture.create(mapWidth, mapHeight);
 
-	for (int i = 0; i < arrayCount; i++)
+	sf::Uint8* pixels = new sf::Uint8[mapWidth*mapHeight*4];
+
+	int currentCell = 0;
+	int index = 0;
+	for (int y = 0; y < mapHeight; y++)
 	{
-		if (mapToDraw[i].getPos().x == 1 && i != 0)
+		for (int x = 0; x < mapWidth; x++)
 		{
-			currentX = 1;
-			currentY += 1;
-			circle.setPosition(zoomValue, currentY * zoomValue);
-		}
-		else
-		{
-			circle.move(zoomValue, 0);
-			currentX += 1;
-		}
-		switch (mapToDraw[i].checkSymbol())
-		{
-		case 'G':
-		case '.': //walkable terrain, draw nothing
-		{
-
-		}
-			break;
-		case '@': //impassable terrain
-		case 'O':
-		{
-			screen->draw(circle);
-		}
-			break;
-		case 'T':
-		{
-
-		}
-			break;
-		default:
-			break;
+			for (int i = 0; i < 4; i++)
+			{
+				switch (mapToDraw[currentCell].checkSymbol())
+				{
+					case 'G':
+					case '.': //walkable terrain, draw nothing
+					{
+						pixels[index] = 0;
+					}
+						break;
+					case '@': //impassable terrain
+					case 'O':
+					{
+						switch (i)
+						{
+							case 0:
+								//r
+								pixels[index] = 0;
+								break;
+							case 1:
+								//g
+								pixels[index] = 0;
+								break;
+							case 2:
+								//b
+								pixels[index] = 255;
+								break;
+							case 3:
+								//a
+								pixels[index] = 255;
+								break;
+						}
+					}
+						break;
+					case 'T':
+					{
+						pixels[index] = 0;
+					}
+						break;
+					default:
+						break;
+				}
+				index++;
+			}
+			currentCell++;
 		}
 	}
-	ToggleRedraw();
-	texture.update(*screen);
+	texture.update(pixels);
+	texture.copyToImage().saveToFile("map.png");
+	mapSprite.setTexture(texture);
+	mapSprite.setPosition(0, 0);
 }
 
 void MapDrawer::DrawMap(sf::RenderWindow* screen)
 {
-		screen->draw(mapSprite);
-}
-
-float MapDrawer::GetZoomValue(int currentZoom)
-{
-	switch (currentZoom)
-	{
-	case 1:
-	{
-		return 2.5f;
-	}
-		break;
-	case 2:
-	{
-		return 1.25f;
-	}
-		break;
-	default:
-		return 0;
-		break;
-	}
+	screen->draw(mapSprite);
 }

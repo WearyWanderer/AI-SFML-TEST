@@ -24,17 +24,13 @@
 #define ViewMngr ViewManager::getInstance()
 #define Tree RTT_Tree::getInstance()
 
-float getFPS(const sf::Time& time);
-
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test", sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test");
 	//window.setFramerateLimit(0);
 	
-	//window.setVerticalSyncEnabled(false);
-
 	srand(time(NULL));
-	MapMngr.LoadMap("maps/dungeon2.map"); //load the map
+	MapMngr.LoadMap("maps/maze1.map"); //load the map
 	sf::Clock WorldTickClock;
 
 	sf::Clock clock;
@@ -59,10 +55,9 @@ int main()
 				window.close();
 		}
 		#pragma endregion
-		
 		#pragma region FPSCounter
 				//Fixed this
-				elapsed = clock.restart();
+				/*elapsed = clock.restart();
 				TicksPerFrame += elapsed.asMilliseconds();
 
 				if (TicksPerFrame >= 500)
@@ -73,19 +68,17 @@ int main()
 					TicksPerFrame = 0;
 					WorldTickClock.restart();
 				}
-				FPSCounter++;
+				FPSCounter++;*/
 		#pragma endregion
 
 		window.clear(); //clear the window
+		
 		MapDrwr.DrawMap(&window); //draw the map texture
-
-		if (TicksPerFrame >= 30)
+		//if (TicksPerFrame >= 30)
 			InputMngr.InputCycle(&window); //take in inputs
-
 		Tree.DrawTree(&window); //draw the tree texture
-		window.display(); //call the display
 		
-		
+		window.display(); //call the display	
 	}
 	return 0;
 }
