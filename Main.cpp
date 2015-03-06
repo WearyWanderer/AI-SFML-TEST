@@ -30,7 +30,7 @@ int main()
 	//window.setFramerateLimit(0);
 	
 	srand(time(NULL));
-	MapMngr.LoadMap("maps/dungeon.map"); //load the map
+	MapMngr.LoadMap("maps/maze1.map"); //load the map
 	sf::Clock WorldTickClock;
 
 	sf::Clock clock;
