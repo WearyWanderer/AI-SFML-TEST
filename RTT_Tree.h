@@ -34,6 +34,7 @@ public:
 	int manhattanDistance(sf::Vector2i pos, sf::Vector2i pos2);
 #pragma endregion
 
+	sf::RenderWindow* screen;
 private:
 	RTT_Tree(int rootX, int rootY);
 
@@ -50,6 +51,7 @@ private:
 
 	sf::Texture treeTexture;
 	sf::Sprite treeSprite;
+	
 	
 };
 

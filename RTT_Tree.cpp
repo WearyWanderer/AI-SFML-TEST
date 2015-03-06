@@ -38,8 +38,22 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 			{
 				if (newNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 				{
-					RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
-					if (nearestNode == nullptr)
+					//RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
+					//if (nearestNode == nullptr)
+					//{
+					//	if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
+					//	{
+					//		targetReached = true;
+					//		continueDrawing = false;
+					//	}
+					//	else
+					//	{
+					//		nodeTree.push_back(newNode);
+					//		previousNode = newNode; //make this node become the next node to base the search off
+					//	}
+					//}
+					//else
+					if(BuildLine(&newNode, &previousNode))
 					{
 						if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
 						{
@@ -51,20 +65,6 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 							nodeTree.push_back(newNode);
 							previousNode = newNode; //make this node become the next node to base the search off
 						}
-					}
-					else
-					{
-						if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
-						{
-							targetReached = true;
-							continueDrawing = false;
-						}
-						else
-						{
-							nodeTree.push_back(newNode);
-							previousNode = newNode; //make this node become the next node to base the search off
-						}
-						//if (BuildLine(nearestNode, &newNode))
 					}
 				}
 			}
@@ -82,8 +82,22 @@ void RTT_Tree::GenerateNode(int nodeLength)
 			{
 				if (newNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 				{
-					RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
-					if (nearestNode == nullptr)
+					//RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
+					//if (nearestNode == nullptr)
+					//{
+					//	if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
+					//	{
+					//		targetReached = true;
+					//		continueDrawing = false;
+					//	}
+					//	else
+					//	{
+					//		nodeTree.push_back(newNode);
+					//		previousNode = newNode; //make this node become the next node to base the search off
+					//	}
+					//}
+					//else
+					if (BuildLine(&newNode, &previousNode))
 					{
 						if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
 						{
@@ -95,20 +109,6 @@ void RTT_Tree::GenerateNode(int nodeLength)
 							nodeTree.push_back(newNode);
 							previousNode = newNode; //make this node become the next node to base the search off
 						}
-					}
-					else
-					{
-						if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
-						{
-							targetReached = true;
-							continueDrawing = false;
-						}
-						else
-						{
-							nodeTree.push_back(newNode);
-							previousNode = newNode; //make this node become the next node to base the search off
-						}
-						//if (BuildLine(nearestNode, &newNode))
 					}
 				}
 			}
@@ -202,6 +202,13 @@ RTT_Node* RTT_Tree::GetNearestNode(RTT_Node* searchingNode, int maxDistance)
 
 bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 {
+	sf::Vertex line[] =
+	{
+		sf::Vertex((sf::Vector2f)node1->GetNodePos()),
+		sf::Vertex((sf::Vector2f)node2->GetNodePos())
+	};
+
+	screen->draw(line, 2, sf::Lines);
 	return true;
 }
 

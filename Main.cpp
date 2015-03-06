@@ -44,6 +44,7 @@ int main()
 	window.setView(ViewMngr.GetView());
 
 	MapDrwr.InitMapTexture(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth()); //create the map into a texture
+	Tree.screen = &window;
 
 	while (window.isOpen())
 	{
