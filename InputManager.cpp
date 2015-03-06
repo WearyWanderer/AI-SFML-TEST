@@ -100,7 +100,8 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 		#endif
 
 			Tree.BeginDrawing();
-			Tree.GenerateNode(12, mousePos);
+			Tree.GenerateNode(40, mousePos);
+
 			lastGoalNode = mousePos;
 			Tree.InitTreeTexture(targetWindow);
 		}

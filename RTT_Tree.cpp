@@ -4,7 +4,8 @@
 RTT_Tree::RTT_Tree(int rootX, int rootY)
 {
 	rootNode = RTT_Node(rootX, rootY);
-	treeTexture.create(960, 720);
+	treeTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
+	lineTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
 }
 
 void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
@@ -12,6 +13,10 @@ void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
 	rootNode.SetNodePos(sf::Vector2i(x, y), MapMngr.GetMap(), MapMngr.GetMapRect());
 	nodeTree.clear(); //empty the old tree
 	continueDrawing = false;
+	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++)
+	{
+		lineTexturePixels[i] = 0;
+	}
 	InitTreeTexture(screen);
 }
 
@@ -20,6 +25,10 @@ void RTT_Tree::SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen)
 	rootNode.SetNodePos(pos, MapMngr.GetMap(), MapMngr.GetMapRect());
 	nodeTree.clear(); //empty the old tree
 	continueDrawing = false;
+	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++)
+	{
+		lineTexturePixels[i] = 0;
+	}
 	InitTreeTexture(screen);
 }
 
@@ -28,98 +37,63 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 	RTT_Node goalNode_ = RTT_Node(0, 0);
 	if (goalNode_.SetNodePos(goalNode, MapMngr.GetMap(), MapMngr.GetMapRect()))
 	{
-		goalNode_.SetTargetNode();
-		nodeTree.push_back(goalNode_); //set this as the target node to reach
-		previousNode = rootNode;
+		nodeTree.push_back(rootNode); //first node in the list
 
-		for (int i = 0; i <= 10; i++)
+		std::default_random_engine generator; //set up random generator for positions
+		std::uniform_int_distribution<int> distributionX(1, MapMngr.GetMapWidth());
+		std::uniform_int_distribution<int> distributionY(1, MapMngr.GetMapHeight());
+		RTT_Node tempNode(0, 0);
+
+		for (int i = 0; i < 20; i++) //seed 20 nodes
 		{
-			RTT_Node newNode(0, 0);
-			sf::Vector2i randomPoint = sf::Vector2i(rand() % nodeLength * 2 + (previousNode.GetNodePos().x - (nodeLength)) + 1, rand() % nodeLength * 2 + (previousNode.GetNodePos().y - (nodeLength)) + 1); //random point on the map
-			if (!IfExistingNode(randomPoint) || (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y)) //if an existing node is not at this position and it is not the target node
+			sf::Vector2i randomPoint = sf::Vector2i(distributionX(generator), distributionY(generator)); //random point on the map
+			if (!IfExistingNode(randomPoint)) //if an existing node is not at this position and it is not the target node
 			{
-				if (newNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
+				if (tempNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 				{
-					RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
-					if (nearestNode == nullptr)
+					RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength);
+					if (nearestNode) //if there is a node within the range of this node
 					{
-						//	if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
-						//	{
-						//		targetReached = true;
-						//		continueDrawing = false;
-						//	}
-						//	else
-						//	{
-						//		nodeTree.push_back(newNode);
-						//		previousNode = newNode; //make this node become the next node to base the search off
-						//	}
-						//}
-						//else
-						if (BuildLine(&newNode, &previousNode))
+						if (BuildLine(&tempNode, nearestNode))
 						{
-							if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
-							{
-								targetReached = true;
-								continueDrawing = false;
-							}
-							else
-							{
-								nodeTree.push_back(newNode);
-								previousNode = newNode; //make this node become the next node to base the search off
-							}
+							nodeTree.push_back(tempNode);
+							return;
 						}
 					}
 				}
 			}
+			i--;
 		}
 	}
 }
 
 void RTT_Tree::GenerateNode(int nodeLength)
 {
-		for (int i = 0; i <= 50; i++)
+	std::default_random_engine generator; //set up random generator for positions
+	std::uniform_int_distribution<int> distributionX(1, MapMngr.GetMapWidth());
+	std::uniform_int_distribution<int> distributionY(1, MapMngr.GetMapHeight());
+	RTT_Node tempNode(0, 0);
+
+	for (int i = 0; i < 20; i++) //seed 20 nodes
+	{
+		sf::Vector2i randomPoint = sf::Vector2i(distributionX(generator), distributionY(generator)); //random point on the map
+		if (!IfExistingNode(randomPoint)) //if an existing node is not at this position and it is not the target node
 		{
-			RTT_Node newNode(0, 0);
-			sf::Vector2i randomPoint = sf::Vector2i(rand() % nodeLength * 2 + (previousNode.GetNodePos().x - (nodeLength)) + 1, rand() % nodeLength * 2 + (previousNode.GetNodePos().y - (nodeLength)) + 1); //random point on the map
-			if (!IfExistingNode(randomPoint) || (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y)) //if an existing node is not at this position and it is not the target node
+			if (tempNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 			{
-				if (newNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
+				RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength);
+				if (nearestNode) //if there is a node within the range of this node
 				{
-					RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
-					if (nearestNode == nullptr)
+					if (BuildLine(&tempNode, nearestNode))
 					{
-						//	if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
-						//	{
-						//		targetReached = true;
-						//		continueDrawing = false;
-						//	}
-						//	else
-						//	{
-						//		nodeTree.push_back(newNode);
-						//		previousNode = newNode; //make this node become the next node to base the search off
-						//	}
-						//else
-						if (BuildLine(&newNode, &previousNode))
-						{
-							if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
-							{
-								targetReached = true;
-								continueDrawing = false;
-							}
-							else
-							{
-								nodeTree.push_back(newNode);
-								previousNode = newNode; //make this node become the next node to base the search off
-							}
-						}
+						nodeTree.push_back(tempNode);
+						return;
 					}
 				}
 			}
-			else
-			{
-				previousNode = nodeTree[rand() % nodeTree.size()];
-			}
 		}
+		i--;
+	}
 }
 
 void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen) //add the RTT_Tree to the draw buffer
@@ -192,98 +166,68 @@ bool RTT_Tree::IfExistingNode(sf::Vector2i position)
 RTT_Node* RTT_Tree::GetNearestNode(RTT_Node* searchingNode, int maxDistance)
 {
 	potentialNodes.clear(); //empty the old potential nodes
-	for each (RTT_Node node in nodeTree)
+	RTT_Node* winner = nullptr;
+	int manDist = INT_MAX;
+	for (RTT_Node& node : nodeTree)
 	{
-		if (manhattanDistance(node.GetNodePos(), searchingNode->GetNodePos()) <= maxDistance)
+		if (manhattanDistance(node.GetNodePos(), searchingNode->GetNodePos()) <= manDist)
 		{
-			potentialNodes.push_back(&node); //add to potential nodes
+			manDist = manhattanDistance(node.GetNodePos(), searchingNode->GetNodePos());
+			winner = &node;
 		}
 	}
-	std::sort(potentialNodes.begin(), potentialNodes.end(), SortTree); //sort the potential nodes into a checkable order
-	//std::vector<RTT_Node>::iterator nearestIterator; //create an iterator to retrieve the correct node
-	if (!potentialNodes.empty())
-	{
-		return potentialNodes[0];
-	}
-	else
-		return nullptr;
+
+	return winner;
 }
 
 bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 {
-	//if (node1->GetNodePos().x <= node2->GetNodePos().x) //if node 1 is behind or equal node2 on the x axis, so should advance
-	//{
-	//	if (node1->GetNodePos().y <= node2->GetNodePos().y) //and is also above or equal on the y axis, so should advance
-	//	{
-	//		sf::FloatRect searchRect(node1->GetNodePos().x, node1->GetNodePos().y, (node2->GetNodePos().x - node1->GetNodePos().x), (node2->GetNodePos().y - node1->GetNodePos().y));
-
-	//	}
-	//	else //must be in below, so must reduce along y
-	//	{
-	//		sf::FloatRect searchRect(node1->GetNodePos().x, node1->GetNodePos().y, (node2->GetNodePos().x - node1->GetNodePos().x), (node2->GetNodePos().y - node1->GetNodePos().y));
-	//	}
-	//}
-	//else //node 1 is in front, so much reduce along x 
-	//{
-	//	if (node1->GetNodePos().y <= node2->GetNodePos().y) //and is above or equal on the y axis, so should advance
-	//	{
-	//		sf::FloatRect searchRect(node1->GetNodePos().x, node1->GetNodePos().y, (node2->GetNodePos().x - node1->GetNodePos().x), (node2->GetNodePos().y - node1->GetNodePos().y));
-	//	}
-	//	else //must be in below, so must reduce along y
-	//	{
-	//		sf::FloatRect searchRect(node2->GetNodePos().x, node2->GetNodePos().y, (node1->GetNodePos().x - node2->GetNodePos().x), (node1->GetNodePos().y - node2->GetNodePos().y));
-	//	}
-	//}
-
 	sf::Vector2i pos1 = node1->GetNodePos();
 	sf::Vector2i pos2 = node2->GetNodePos();
 
-	sf::Vector2i recPos1;
-	sf::Vector2i recPos2;
+	const sf::Vector2i directionVector = pos2 - pos1;
+	const float magnitude = sqrt((directionVector.y * directionVector.y) + (directionVector.x * directionVector.x));
+	const sf::Vector2f unitVector = (sf::Vector2f)directionVector / magnitude;
 
-	if (pos1.x <= pos2.x)
+	for (int i = 0; i < magnitude; i++)
 	{
-		recPos1.x = pos1.x;
-		recPos2.x = pos2.x;
-	}	
-	else 
-	{
-		recPos1.x = pos2.x;
-		recPos2.x = pos1.x;
-	}
-
-	if (pos1.y<= pos2.y)
-	{
-		recPos1.y = pos1.y;
-		recPos2.y = pos2.y;
-	}
-	else 
-	{
-		recPos1.y = pos2.y;
-		recPos2.y = pos1.y;
-	}
-	
-	for (int y = recPos1.y; y < recPos2.y; y++)
-	{
-		for (int x = recPos1.x; x < recPos2.x; x++)
+		sf::Vector2i arrayLoc(pos1 + (sf::Vector2i)((float)i * unitVector));
+		if (MapMngr.GetMap()[(arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x].checkSymbol() == '@')
 		{
-			if (MapMngr.GetMap()[(y * MapMngr.GetMapWidth()) + x].checkSymbol() == '@')
-			{
-				return false;
-			}
+			return false;
 		}
 	}
 
-
-
-
-	sf::Vertex line[] =
+	for (int i = 0; i < magnitude; i++)
 	{
-		sf::Vertex((sf::Vector2f)node1->GetNodePos()),
-		sf::Vertex((sf::Vector2f)node2->GetNodePos())
-	};
+		sf::Vector2i arrayLoc(pos1 + (sf::Vector2i)((float)i * unitVector));
+		for (int i = 0; i < 4; i++)
+			{
+				switch (i)
+				{
+				case 0:
+					//r
+					lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
+					break;
+				case 1:
+					//g
+					lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
+					break;
+				case 2:
+					//b
+					lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
+					break;
+				case 3:
+					//a
+					lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
+					break;
+				}
+			}
+	}
 
-	screen->draw(line, 2, sf::Lines);
+	lineTexture.update(lineTexturePixels);
+	lineSprite.setTexture(lineTexture);
+	screen->draw(lineSprite);
 	return true;
 }
 

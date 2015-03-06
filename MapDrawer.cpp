@@ -64,6 +64,7 @@ void MapDrawer::InitMapTexture(sf::RenderWindow* screen, Tile mapToDraw[], int m
 		}
 	}
 	texture.update(pixels);
+	texture.setSmooth(true);
 	texture.copyToImage().saveToFile("map.png");
 	mapSprite.setTexture(texture);
 	mapSprite.setPosition(0, 0);

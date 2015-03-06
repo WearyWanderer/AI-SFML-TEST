@@ -44,7 +44,7 @@ private:
 	MapLoader(MapLoader const&) = delete;
 	void operator=(MapLoader const&) = delete;
 
-	Tile mapArray[512*513]; //defaults to a 512x512 map, but this can be reallocated
+	Tile mapArray[512*512]; //defaults to a 512x512 map, but this can be reallocated
 	int mapWidth;
 	int	mapHeight;
 	sf::IntRect boundsRect;

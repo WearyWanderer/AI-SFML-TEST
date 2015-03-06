@@ -30,7 +30,7 @@ int main()
 	//window.setFramerateLimit(0);
 	
 	srand(time(NULL));
-	MapMngr.LoadMap("maps/maze1.map"); //load the map
+	MapMngr.LoadMap("maps/testMap.map"); //load the map
 	sf::Clock WorldTickClock;
 
 	sf::Clock clock;
@@ -79,7 +79,7 @@ int main()
 		InputMngr.InputCycle(&window); //take in inputs
 		if (Tree.IfDrawing())
 		{
-			Tree.GenerateNode(12);
+			Tree.GenerateNode(40);
 			Tree.InitTreeTexture(&window);
 		}
 		Tree.DrawTree(&window); //draw the tree texture

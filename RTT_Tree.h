@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <random>
 #include <sfml\Graphics.hpp>
 #include "RTT_Node.h"
 #include "MapLoader.h"
@@ -23,7 +24,7 @@ public:
 	void RTT_Tree::GenerateNode(int nodeLength);
 	void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);
-	inline void SetZoom(int zoomToSet){ treeSprite.setScale(zoomToSet, zoomToSet); }
+	inline void SetZoom(int zoomToSet){ treeSprite.setScale(zoomToSet, zoomToSet); lineSprite.setScale(zoomToSet, zoomToSet); }
 
 #pragma region TreeNodeLookup_Lines
 	bool IfExistingNode(sf::Vector2i position);
@@ -51,6 +52,10 @@ private:
 
 	sf::Texture treeTexture;
 	sf::Sprite treeSprite;
+	sf::Texture lineTexture;
+	sf::Sprite lineSprite;
+
+	sf::Uint8* lineTexturePixels = new sf::Uint8[MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4];
 	
 	
 };
