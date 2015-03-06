@@ -11,6 +11,7 @@ void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
 {
 	rootNode.SetNodePos(sf::Vector2i(x, y), MapMngr.GetMap(), MapMngr.GetMapRect());
 	nodeTree.clear(); //empty the old tree
+	continueDrawing = false;
 	InitTreeTexture(screen);
 }
 
@@ -18,6 +19,7 @@ void RTT_Tree::SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen)
 {
 	rootNode.SetNodePos(pos, MapMngr.GetMap(), MapMngr.GetMapRect());
 	nodeTree.clear(); //empty the old tree
+	continueDrawing = false;
 	InitTreeTexture(screen);
 }
 
