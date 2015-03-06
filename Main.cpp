@@ -10,7 +10,6 @@
 #include <iostream>
 #include <string>
 #include <time.h>
-#include <ctime>
 #include <SFML/Graphics.hpp>
 
 #include "MapLoader.h"
@@ -30,7 +29,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test");
 	//window.setFramerateLimit(0);
 	
-	srand(std::time(0));
+	srand(time(NULL));
 	MapMngr.LoadMap("maps/maze1.map"); //load the map
 	sf::Clock WorldTickClock;
 
@@ -80,7 +79,7 @@ int main()
 		InputMngr.InputCycle(&window); //take in inputs
 		if (Tree.IfDrawing())
 		{
-			Tree.GenerateNode(4);
+			Tree.GenerateNode(5);
 			Tree.InitTreeTexture(&window);
 		}
 		Tree.DrawTree(&window); //draw the tree texture
