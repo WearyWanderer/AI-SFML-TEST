@@ -40,9 +40,9 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 			{
 				if (newNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 				{
-					RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
-					if (nearestNode == nullptr)
-					{
+					//RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
+					//if (nearestNode == nullptr)
+					//{
 						//	if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
 						//	{
 						//		targetReached = true;
@@ -68,7 +68,7 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 								previousNode = newNode; //make this node become the next node to base the search off
 							}
 						}
-					}
+					//}
 				}
 			}
 		}
@@ -77,7 +77,11 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 
 void RTT_Tree::GenerateNode(int nodeLength)
 {
-		for (int i = 0; i <= 10; i++)
+	for (int i = 0; i <= 10; i++)
+	{
+		bool tryAgain = true;
+		int totalRetries = 0;
+		while (tryAgain)
 		{
 			RTT_Node newNode(0, 0);
 			sf::Vector2i randomPoint = sf::Vector2i(rand() % nodeLength * 2 + (previousNode.GetNodePos().x - (nodeLength)) + 1, rand() % nodeLength * 2 + (previousNode.GetNodePos().y - (nodeLength)) + 1); //random point on the map
@@ -85,9 +89,9 @@ void RTT_Tree::GenerateNode(int nodeLength)
 			{
 				if (newNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 				{
-					RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
-					if (nearestNode == nullptr)
-					{
+					//RTT_Node* nearestNode = GetNearestNode(&newNode, nodeLength);
+					//if (nearestNode == nullptr)
+					//{
 						//	if (randomPoint.x == nodeTree[0].GetNodePos().x && randomPoint.y == nodeTree[0].GetNodePos().y) //if we've hit the target point
 						//	{
 						//		targetReached = true;
@@ -110,12 +114,19 @@ void RTT_Tree::GenerateNode(int nodeLength)
 							{
 								nodeTree.push_back(newNode);
 								previousNode = newNode; //make this node become the next node to base the search off
+								tryAgain = false;
 							}
 						}
-					}
+						else
+						{
+							tryAgain = true;
+							totalRetries++;
+						}
+					//}
 				}
 			}
 		}
+	}
 }
 
 void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen) //add the RTT_Tree to the draw buffer
@@ -239,24 +250,24 @@ bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 	{
 		recPos1.x = pos1.x;
 		recPos2.x = pos2.x;
-	}	
-	else 
+	}
+	else
 	{
 		recPos1.x = pos2.x;
 		recPos2.x = pos1.x;
 	}
 
-	if (pos1.y<= pos2.y)
+	if (pos1.y <= pos2.y)
 	{
 		recPos1.y = pos1.y;
 		recPos2.y = pos2.y;
 	}
-	else 
+	else
 	{
 		recPos1.y = pos2.y;
 		recPos2.y = pos1.y;
 	}
-	
+
 	for (int y = recPos1.y; y < recPos2.y; y++)
 	{
 		for (int x = recPos1.x; x < recPos2.x; x++)
