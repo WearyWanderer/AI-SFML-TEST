@@ -205,6 +205,72 @@ RTT_Node* RTT_Tree::GetNearestNode(RTT_Node* searchingNode, int maxDistance)
 
 bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 {
+	//if (node1->GetNodePos().x <= node2->GetNodePos().x) //if node 1 is behind or equal node2 on the x axis, so should advance
+	//{
+	//	if (node1->GetNodePos().y <= node2->GetNodePos().y) //and is also above or equal on the y axis, so should advance
+	//	{
+	//		sf::FloatRect searchRect(node1->GetNodePos().x, node1->GetNodePos().y, (node2->GetNodePos().x - node1->GetNodePos().x), (node2->GetNodePos().y - node1->GetNodePos().y));
+
+	//	}
+	//	else //must be in below, so must reduce along y
+	//	{
+	//		sf::FloatRect searchRect(node1->GetNodePos().x, node1->GetNodePos().y, (node2->GetNodePos().x - node1->GetNodePos().x), (node2->GetNodePos().y - node1->GetNodePos().y));
+	//	}
+	//}
+	//else //node 1 is in front, so much reduce along x 
+	//{
+	//	if (node1->GetNodePos().y <= node2->GetNodePos().y) //and is above or equal on the y axis, so should advance
+	//	{
+	//		sf::FloatRect searchRect(node1->GetNodePos().x, node1->GetNodePos().y, (node2->GetNodePos().x - node1->GetNodePos().x), (node2->GetNodePos().y - node1->GetNodePos().y));
+	//	}
+	//	else //must be in below, so must reduce along y
+	//	{
+	//		sf::FloatRect searchRect(node2->GetNodePos().x, node2->GetNodePos().y, (node1->GetNodePos().x - node2->GetNodePos().x), (node1->GetNodePos().y - node2->GetNodePos().y));
+	//	}
+	//}
+
+	sf::Vector2i pos1 = node1->GetNodePos();
+	sf::Vector2i pos2 = node2->GetNodePos();
+
+	sf::Vector2i recPos1;
+	sf::Vector2i recPos2;
+
+	if (pos1.x <= pos2.x)
+	{
+		recPos1.x = pos1.x;
+		recPos2.x = pos2.x;
+	}	
+	else 
+	{
+		recPos1.x = pos2.x;
+		recPos2.x = pos1.x;
+	}
+
+	if (pos1.y<= pos2.y)
+	{
+		recPos1.y = pos1.y;
+		recPos2.y = pos2.y;
+	}
+	else 
+	{
+		recPos1.y = pos2.y;
+		recPos2.y = pos1.y;
+	}
+	
+	for (int y = recPos1.y; y < recPos2.y; y++)
+	{
+		for (int x = recPos1.x; x < recPos2.x; x++)
+		{
+			if (MapMngr.GetMap()[(y * MapMngr.GetMapWidth()) + x].checkSymbol() == '@')
+			{
+				return false;
+			}
+		}
+	}
+
+
+
+
 	sf::Vertex line[] =
 	{
 		sf::Vertex((sf::Vector2f)node1->GetNodePos()),
