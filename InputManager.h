@@ -21,6 +21,7 @@ public:
 	}
 
 	void InputCycle(sf::RenderWindow* targetWindow);
+	inline bool GetMode(){ return inputMode; }
 	sf::Vector2i lastGoalNode;
 private:
 	InputManager();
@@ -31,6 +32,7 @@ private:
 
 	bool leftMouseDown = false;
 	bool rightMouseDown = false;
-	
+
+	bool inputMode = true; //true is mapping mode, false is pathfinding mode
 };
 

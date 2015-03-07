@@ -26,11 +26,17 @@
 
 int main()
 {
+	sf::Font defaultFont;
+	defaultFont.loadFromFile("fonts/kenvector_future.ttf");
+	sf::Text firstModeTest("RTT-Generation Mode [Press'H' to switch]", defaultFont, 18);
+	firstModeTest.setColor(sf::Color::Red);
+	firstModeTest.setPosition(250, 650);
+
 	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test");
 	//window.setFramerateLimit(0);
 	
 	srand(time(NULL));
-	MapMngr.LoadMap("maps/testMap.map"); //load the map
+	MapMngr.LoadMap("maps/dungeon.map"); //load the map
 	sf::Clock WorldTickClock;
 
 	sf::Clock clock;
@@ -82,9 +88,13 @@ int main()
 			Tree.GenerateNode(40);
 			Tree.InitTreeTexture(&window);
 		}
-		Tree.DrawTree(&window); //draw the tree texture
+
 		window.draw(Tree.GetLineSprite());
-		
+		Tree.DrawTree(&window); //draw the tree texture
+		if (InputMngr.GetMode())
+		{
+			window.draw(firstModeTest);
+		}
 		window.display(); //call the display	
 	}
 	return 0;
