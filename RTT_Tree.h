@@ -30,7 +30,9 @@ public:
 #pragma region TreeNodeLookup_Lines
 	bool IfExistingNode(sf::Vector2i position);
 	RTT_Node* GetNearestNode(RTT_Node* searchingNode, int maxDistance);
+	RTT_Node* GetNearestNode(sf::Vector2i position, int maxDistance);
 	bool BuildLine(RTT_Node* node1, RTT_Node* node2);
+	void BuildPath(RTT_Node* destinationNode);
 	inline void BeginDrawing(){ continueDrawing = true; targetReached = false; }
 	inline void StopDrawing(){ continueDrawing = false; targetReached = false; }
 	inline bool IfDrawing(){ return continueDrawing; }
@@ -46,9 +48,7 @@ private:
 	void operator=(RTT_Tree const&) = delete;
 
 	RTT_Node rootNode;
-	RTT_Node previousNode;
 	std::vector<RTT_Node> nodeTree;
-	std::vector<RTT_Node*> potentialNodes; //used in the function of getting the nearest nodes, rather than calling ever frame, just have as a member variable
 	bool targetReached = true;
 	bool continueDrawing = false;
 
@@ -56,8 +56,11 @@ private:
 	sf::Sprite treeSprite;
 	sf::Texture lineTexture;
 	sf::Sprite lineSprite;
+	sf::Texture pathTexture;
+	sf::Sprite pathSprite;
 
 	sf::Uint8* lineTexturePixels = new sf::Uint8[MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4];
+	sf::Uint8* pathTexturePixels = new sf::Uint8[MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4];
 	
 	
 };

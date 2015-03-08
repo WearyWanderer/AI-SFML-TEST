@@ -4,8 +4,10 @@
 RTT_Tree::RTT_Tree(int rootX, int rootY)
 {
 	rootNode = RTT_Node(rootX, rootY);
+	rootNode.SetParent(&rootNode);
 	treeTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
 	lineTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
+	pathTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
 }
 
 void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
@@ -13,11 +15,15 @@ void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
 	rootNode.SetNodePos(sf::Vector2i(x, y), MapMngr.GetMap(), MapMngr.GetMapRect());
 	nodeTree.clear(); //empty the old tree
 	continueDrawing = false;
-	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++)
+	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++) //clean up the previous texture data
 	{
 		lineTexturePixels[i] = 0;
 	}
-	InitTreeTexture(screen);
+	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++)
+	{
+		pathTexturePixels[i] = 0;
+	}
+	InitTreeTexture(screen); //reinitilise the tree screen
 }
 
 void RTT_Tree::SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen)
@@ -28,6 +34,10 @@ void RTT_Tree::SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen)
 	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++)
 	{
 		lineTexturePixels[i] = 0;
+	}
+	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++)
+	{
+		pathTexturePixels[i] = 0;
 	}
 	InitTreeTexture(screen);
 }
@@ -56,8 +66,8 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 					{
 						if (BuildLine(&tempNode, nearestNode))
 						{
+							tempNode.SetParent(GetNearestNode(&tempNode, nodeLength));  //pointer decay means we cannot pass in nearest node as it will break next loop
 							nodeTree.push_back(tempNode);
-							return;
 						}
 					}
 				}
@@ -86,8 +96,8 @@ void RTT_Tree::GenerateNode(int nodeLength)
 				{
 					if (BuildLine(&tempNode, nearestNode))
 					{
+						tempNode.SetParent(GetNearestNode(&tempNode, nodeLength));  //pointer decay means we cannot pass in nearest node as it will break next loop
 						nodeTree.push_back(tempNode);
-						return;
 					}
 				}
 			}
@@ -134,7 +144,6 @@ void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen) //add the RTT_Tree to t
 	}
 
 	treeTexture.update(pixels);
-	//treeTexture.copyToImage().saveToFile("treeDrawn.png");
 	treeSprite.setTexture(treeTexture);
 	treeSprite.setPosition(0, 0);
 
@@ -143,7 +152,9 @@ void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen) //add the RTT_Tree to t
 
 void RTT_Tree::DrawTree(sf::RenderWindow* screen) //add the RTT_Tree to the draw buffer
 {
+	screen->draw(lineSprite);
 	screen->draw(treeSprite);
+	screen->draw(pathSprite);
 }
 
 bool SortTree(RTT_Node* e1, RTT_Node* e2)
@@ -165,7 +176,6 @@ bool RTT_Tree::IfExistingNode(sf::Vector2i position)
 
 RTT_Node* RTT_Tree::GetNearestNode(RTT_Node* searchingNode, int maxDistance)
 {
-	potentialNodes.clear(); //empty the old potential nodes
 	RTT_Node* winner = nullptr;
 	int manDist = INT_MAX;
 	for (RTT_Node& node : nodeTree)
@@ -176,7 +186,21 @@ RTT_Node* RTT_Tree::GetNearestNode(RTT_Node* searchingNode, int maxDistance)
 			winner = &node;
 		}
 	}
+	return winner;
+}
 
+RTT_Node* RTT_Tree::GetNearestNode(sf::Vector2i position, int maxDistance)
+{
+	RTT_Node* winner = nullptr;
+	int manDist = INT_MAX;
+	for (RTT_Node& node : nodeTree)
+	{
+		if (manhattanDistance(node.GetNodePos(), position) <= manDist)
+		{
+			manDist = manhattanDistance(node.GetNodePos(), position);
+			winner = &node;
+		}
+	}
 	return winner;
 }
 
@@ -228,6 +252,52 @@ bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 	lineTexture.update(lineTexturePixels);
 	lineSprite.setTexture(lineTexture);
 	return true;
+}
+
+void RTT_Tree::BuildPath(RTT_Node* destinationNode)
+{
+	RTT_Node* currentNode = destinationNode;
+
+	int pathsToDraw = 0;
+	while (currentNode->GetParent()->GetNodePos().x != rootNode.GetNodePos().x && currentNode->GetParent()->GetNodePos().y != rootNode.GetNodePos().y) //while we arent drawing to the root node
+	{
+		sf::Vector2i pos1 = currentNode->GetNodePos();
+		sf::Vector2i pos2 = currentNode->GetParent()->GetNodePos();
+		const sf::Vector2i directionVector = pos2 - pos1;
+		const float magnitude = sqrt((directionVector.y * directionVector.y) + (directionVector.x * directionVector.x));
+		const sf::Vector2f unitVector = (sf::Vector2f)directionVector / magnitude;
+
+		for (int i = 0; i < magnitude; i++)
+		{
+			sf::Vector2i arrayLoc(pos1 + (sf::Vector2i)((float)i * unitVector));
+			for (int i = 0; i < 4; i++)
+			{
+				switch (i)
+				{
+				case 0:
+					//r
+					pathTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 50;
+					break;
+				case 1:
+					//g
+					pathTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 145;
+					break;
+				case 2:
+					//b
+					pathTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 35;
+					break;
+				case 3:
+					//a
+					pathTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
+					break;
+				}
+			}
+		}
+		currentNode = currentNode->GetParent();
+	}
+
+	pathTexture.update(pathTexturePixels);
+	pathSprite.setTexture(pathTexture);
 }
 
 int RTT_Tree::manhattanDistance(sf::Vector2i pos, sf::Vector2i pos2)

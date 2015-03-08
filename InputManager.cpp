@@ -67,20 +67,27 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 	{
 		if (!leftMouseDown)
 		{
-			leftMouseDown = true;
-
-			sf::Vector2i mousePos
+			sf::Vector2i mousePos //get the relative mousePos
 				(
 				(sf::Mouse::getPosition(*targetWindow).x + (targetWindow->getView().getCenter().x - (targetWindow->getView().getSize().x / 2))) / MapDrwr.GetZoomValue(),
 				(sf::Mouse::getPosition(*targetWindow).y + (targetWindow->getView().getCenter().y - (targetWindow->getView().getSize().y / 2))) / MapDrwr.GetZoomValue()
 				);
 
-#ifdef _DEBUG
+			#ifdef _DEBUG
 			std::cout << mousePos.x << " X-Pos" << std::endl;
 			std::cout << mousePos.y << " Y-Pos" << std::endl;
-#endif
+			#endif
 
-			Tree.SetNewRoot(sf::Vector2i(mousePos.x, mousePos.y), targetWindow);
+			if (inputMode) //mapping mode logic
+			{
+				leftMouseDown = true;
+				Tree.SetNewRoot(sf::Vector2i(mousePos.x, mousePos.y), targetWindow);
+			}
+			else //pathfinding logic
+			{
+				leftMouseDown = true;
+				Tree.BuildPath(Tree.GetNearestNode(mousePos, INT_MAX));
+			}
 		}
 	}
 	else

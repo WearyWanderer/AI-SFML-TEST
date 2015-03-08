@@ -19,6 +19,8 @@ public:
 	bool SetNodePos(sf::Vector2i newPos, Tile mapInfo[], sf::IntRect boundsRect);
 	inline bool isTarget(){ return isTargetNode; }
 	inline void SetTargetNode(){ isTargetNode = true; }
+	inline void SetParent(RTT_Node* parent){ parentNode = parent; }
+	inline RTT_Node* GetParent(){ return parentNode; }
 
 #pragma region OverloadForSorting
 	bool operator < (const RTT_Node& str) const
@@ -33,6 +35,7 @@ public:
 
 private:
 
+	RTT_Node* parentNode;
 	sf::Vector2i nodePos;
 	bool isTargetNode = false;
 	
