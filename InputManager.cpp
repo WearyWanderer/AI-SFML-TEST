@@ -2,60 +2,62 @@
 
 InputManager::InputManager()
 {
-
+	defaultFont.loadFromFile("fonts/kenvector_future.ttf");
+	firstModeTest = sf::Text("RTT-Generation Mode [Press'H' to switch]", defaultFont, 18);
+	firstModeTest.setColor(sf::Color::Red);
+	firstModeTest.setPosition(250, 650);
 }
 
 void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		//MapDrwr.AlterCameraOffset(sf::Vector2i(-1, 0));
 		ViewMngr.AlterView(1, 0);
 		targetWindow->setView(ViewMngr.GetView());
-		//MapDrwr.mapSprite.move(1, 0);
+		firstModeTest.move(1, 0);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		//MapDrwr.AlterCameraOffset(sf::Vector2i(1, 0));
 		ViewMngr.AlterView(-1, 0);
 		targetWindow->setView(ViewMngr.GetView());
+		firstModeTest.move(-1, 0);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		//MapDrwr.AlterCameraOffset(sf::Vector2i(0, -1));
 		ViewMngr.AlterView(0, 1);
 		targetWindow->setView(ViewMngr.GetView());
+		firstModeTest.move(0, 1);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		//MapDrwr.AlterCameraOffset(sf::Vector2i(0, 1));
 		ViewMngr.AlterView(0, -1);
 		targetWindow->setView(ViewMngr.GetView());
+		firstModeTest.move(0, -1);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 	{
-		//MapDrwr.ResetCameraOffset();
 		ViewMngr.SetView(sf::FloatRect(0, 0, 960, 720));
 		targetWindow->setView(ViewMngr.GetView());
+		firstModeTest.setPosition(250, 650);
 	}
+
+#pragma region zoomControls
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 	{
-		//MapDrwr.ResetCameraOffset();
 		MapDrwr.SetZoom(Zoomx1);
 		Tree.SetZoom(Zoomx1);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 	{
-		//MapDrwr.ResetCameraOffset();
 		MapDrwr.SetZoom(Zoomx2);
 		Tree.SetZoom(Zoomx2);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 	{
-		//MapDrwr.ResetCameraOffset();
 		MapDrwr.SetZoom(Zoomx3);
 		Tree.SetZoom(Zoomx3);
 	}
+#pragma endregion
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
