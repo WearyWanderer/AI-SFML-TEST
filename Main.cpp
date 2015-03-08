@@ -26,11 +26,6 @@
 
 int main()
 {
-	sf::Font defaultFont;
-	defaultFont.loadFromFile("fonts/kenvector_future.ttf");
-	sf::Text firstModeTest("RTT-Generation Mode [Press'H' to switch]", defaultFont, 18);
-	firstModeTest.setColor(sf::Color::Red);
-	firstModeTest.setPosition(250, 650);
 
 	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test");
 	//window.setFramerateLimit(0);
@@ -93,7 +88,7 @@ int main()
 		Tree.DrawTree(&window); //draw the tree texture
 		if (InputMngr.GetMode())
 		{
-			window.draw(firstModeTest);
+			window.draw(InputMngr.GetModeText());
 		}
 		window.display(); //call the display	
 	}
