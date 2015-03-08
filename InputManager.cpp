@@ -10,6 +10,8 @@ InputManager::InputManager()
 
 void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 {
+
+#pragma region movementControls
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		ViewMngr.AlterView(1, 0);
@@ -40,6 +42,7 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 		targetWindow->setView(ViewMngr.GetView());
 		firstModeTest.setPosition(250, 650);
 	}
+#pragma endregion
 
 #pragma region zoomControls
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
@@ -59,6 +62,7 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 	}
 #pragma endregion
 
+#pragma region mapClickControls
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		if (!leftMouseDown)
@@ -66,15 +70,15 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 			leftMouseDown = true;
 
 			sf::Vector2i mousePos
-			(
-				(sf::Mouse::getPosition(*targetWindow).x + (targetWindow->getView().getCenter().x - (targetWindow->getView().getSize().x / 2))) / MapDrwr.GetZoomValue(), 
+				(
+				(sf::Mouse::getPosition(*targetWindow).x + (targetWindow->getView().getCenter().x - (targetWindow->getView().getSize().x / 2))) / MapDrwr.GetZoomValue(),
 				(sf::Mouse::getPosition(*targetWindow).y + (targetWindow->getView().getCenter().y - (targetWindow->getView().getSize().y / 2))) / MapDrwr.GetZoomValue()
-			);
+				);
 
-			#ifdef _DEBUG
-				std::cout << mousePos.x << " X-Pos" << std::endl;
-				std::cout << mousePos.y << " Y-Pos" << std::endl;
-			#endif
+#ifdef _DEBUG
+			std::cout << mousePos.x << " X-Pos" << std::endl;
+			std::cout << mousePos.y << " Y-Pos" << std::endl;
+#endif
 
 			Tree.SetNewRoot(sf::Vector2i(mousePos.x, mousePos.y), targetWindow);
 		}
@@ -84,7 +88,7 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 		leftMouseDown = false;
 	}
 
-	if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
 		if (!rightMouseDown)
 		{
@@ -96,10 +100,10 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 				(sf::Mouse::getPosition(*targetWindow).y + (targetWindow->getView().getCenter().y - (targetWindow->getView().getSize().y / 2))) / MapDrwr.GetZoomValue()
 				);
 
-		#ifdef _DEBUG
+#ifdef _DEBUG
 			std::cout << mousePos.x << " X-Pos" << std::endl;
 			std::cout << mousePos.y << " Y-Pos" << std::endl;
-		#endif
+#endif
 
 			Tree.BeginDrawing();
 			Tree.GenerateNode(40, mousePos);
@@ -112,9 +116,33 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 	{
 		rightMouseDown = false;
 	}
+#pragma endregion
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+#pragma region modeContextControls
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) //stop drawing control to limit node creation
 	{
 		Tree.StopDrawing();
 	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
+	{
+		if (!modeToggleDown)
+		{
+			modeToggleDown = true;
+			if (inputMode)
+			{
+				firstModeTest.setString("Pathfinding Mode [Press 'H' to switch]"); //change mode visual feedback text
+			}
+			else
+			{
+				firstModeTest.setString("RTT-Generation Mode [Press'H' to switch]");
+			}
+			inputMode = !inputMode; // switch mode toggle here
+		}
+	}
+	else
+	{
+		modeToggleDown = false;
+	}
+#pragma endregion
 }

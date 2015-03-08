@@ -59,7 +59,7 @@ int main()
 		#pragma endregion
 		#pragma region FPSCounter
 				//Fixed this
-				/*elapsed = clock.restart();
+				elapsed = clock.restart();
 				TicksPerFrame += elapsed.asMilliseconds();
 
 				if (TicksPerFrame >= 500)
@@ -70,7 +70,7 @@ int main()
 					TicksPerFrame = 0;
 					WorldTickClock.restart();
 				}
-				FPSCounter++;*/
+				FPSCounter++;
 		#pragma endregion
 
 		window.clear(); //clear the window
@@ -86,10 +86,7 @@ int main()
 
 		window.draw(Tree.GetLineSprite());
 		Tree.DrawTree(&window); //draw the tree texture
-		if (InputMngr.GetMode())
-		{
-			window.draw(InputMngr.GetModeText());
-		}
+		window.draw(InputMngr.GetModeText());
 		window.display(); //call the display	
 	}
 	return 0;

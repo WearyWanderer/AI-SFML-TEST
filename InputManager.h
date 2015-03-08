@@ -33,6 +33,7 @@ private:
 
 	bool leftMouseDown = false;
 	bool rightMouseDown = false;
+	bool modeToggleDown = false;
 
 	bool inputMode = true; //true is mapping mode, false is pathfinding mode
 	sf::Font defaultFont;
