@@ -25,7 +25,7 @@ public:
 	void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);
 	inline sf::Sprite GetLineSprite(){ return lineSprite; }
-	inline void SetZoom(int zoomToSet){ treeSprite.setScale(zoomToSet, zoomToSet); lineSprite.setScale(zoomToSet, zoomToSet); }
+	inline void SetZoom(int zoomToSet){ treeSprite.setScale(zoomToSet, zoomToSet); lineSprite.setScale(zoomToSet, zoomToSet); pathSprite.setScale(zoomToSet, zoomToSet); }
 
 #pragma region TreeNodeLookup_Lines
 	bool IfExistingNode(sf::Vector2i position);

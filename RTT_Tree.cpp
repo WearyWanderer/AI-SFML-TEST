@@ -52,22 +52,23 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 		std::default_random_engine generator; //set up random generator for positions
 		std::uniform_int_distribution<int> distributionX(1, MapMngr.GetMapWidth());
 		std::uniform_int_distribution<int> distributionY(1, MapMngr.GetMapHeight());
-		RTT_Node tempNode(0, 0);
 
 		for (int i = 0; i < 20; i++) //seed 20 nodes
 		{
+			RTT_Node* tempNode = new RTT_Node();
 			sf::Vector2i randomPoint = sf::Vector2i(distributionX(generator), distributionY(generator)); //random point on the map
 			if (!IfExistingNode(randomPoint)) //if an existing node is not at this position and it is not the target node
 			{
-				if (tempNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
+				if (tempNode->SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 				{
-					RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength);
+					RTT_Node* nearestNode = GetNearestNode(tempNode, nodeLength);
 					if (nearestNode) //if there is a node within the range of this node
 					{
-						if (BuildLine(&tempNode, nearestNode))
+						if (BuildLine(tempNode, nearestNode))
 						{
-							tempNode.SetParent(GetNearestNode(&tempNode, nodeLength));  //pointer decay means we cannot pass in nearest node as it will break next loop
-							nodeTree.push_back(tempNode);
+							tempNode->SetParent(&rootNode);
+							nodeTree.push_back(*tempNode);
+							return;
 						}
 					}
 				}
@@ -82,22 +83,23 @@ void RTT_Tree::GenerateNode(int nodeLength)
 	std::default_random_engine generator; //set up random generator for positions
 	std::uniform_int_distribution<int> distributionX(1, MapMngr.GetMapWidth());
 	std::uniform_int_distribution<int> distributionY(1, MapMngr.GetMapHeight());
-	RTT_Node tempNode(0, 0);
 
 	for (int i = 0; i < 20; i++) //seed 20 nodes
 	{
+		RTT_Node* tempNode = new RTT_Node();
 		sf::Vector2i randomPoint = sf::Vector2i(distributionX(generator), distributionY(generator)); //random point on the map
 		if (!IfExistingNode(randomPoint)) //if an existing node is not at this position and it is not the target node
 		{
-			if (tempNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
+			if (tempNode->SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 			{
-				RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength);
+				RTT_Node* nearestNode = GetNearestNode(tempNode, nodeLength);
 				if (nearestNode) //if there is a node within the range of this node
 				{
-					if (BuildLine(&tempNode, nearestNode))
+					if (BuildLine(tempNode, nearestNode))
 					{
-						tempNode.SetParent(GetNearestNode(&tempNode, nodeLength));  //pointer decay means we cannot pass in nearest node as it will break next loop
-						nodeTree.push_back(tempNode);
+						tempNode->SetParent(&rootNode);
+						nodeTree.push_back(*tempNode);
+						return;
 					}
 				}
 			}
@@ -256,10 +258,14 @@ bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 
 void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 {
+	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++) //remove existing path
+	{
+		pathTexturePixels[i] = 0;
+	}
+
 	RTT_Node* currentNode = destinationNode;
 
-	int pathsToDraw = 0;
-	while (currentNode->GetParent()->GetNodePos().x != rootNode.GetNodePos().x && currentNode->GetParent()->GetNodePos().y != rootNode.GetNodePos().y) //while we arent drawing to the root node
+	//while (currentNode->GetParent()->GetNodePos().x != rootNode.GetNodePos().x && currentNode->GetParent()->GetNodePos().y != rootNode.GetNodePos().y) //while we arent drawing to the root node
 	{
 		sf::Vector2i pos1 = currentNode->GetNodePos();
 		sf::Vector2i pos2 = currentNode->GetParent()->GetNodePos();
@@ -276,7 +282,7 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 				{
 				case 0:
 					//r
-					pathTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 50;
+					pathTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 230;
 					break;
 				case 1:
 					//g
