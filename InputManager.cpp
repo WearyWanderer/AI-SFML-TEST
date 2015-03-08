@@ -86,7 +86,7 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 			else //pathfinding logic
 			{
 				leftMouseDown = true;
-				Tree.BuildPath(Tree.GetNearestNode(mousePos, INT_MAX));
+				Tree.BuildPath(&Tree.GetTree()[Tree.GetNearestNode(mousePos, INT_MAX)]);
 			}
 		}
 	}

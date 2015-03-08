@@ -4,7 +4,7 @@
 RTT_Tree::RTT_Tree(int rootX, int rootY)
 {
 	rootNode = RTT_Node(rootX, rootY);
-	rootNode.SetParent(&rootNode);
+	rootNode.SetParent(0);
 	treeTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
 	lineTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
 	pathTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
@@ -55,19 +55,19 @@ void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
 
 		for (int i = 0; i < 20; i++) //seed 20 nodes
 		{
-			RTT_Node* tempNode = new RTT_Node();
+			RTT_Node tempNode = RTT_Node();
 			sf::Vector2i randomPoint = sf::Vector2i(distributionX(generator), distributionY(generator)); //random point on the map
 			if (!IfExistingNode(randomPoint)) //if an existing node is not at this position and it is not the target node
 			{
-				if (tempNode->SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
+				if (tempNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 				{
-					RTT_Node* nearestNode = GetNearestNode(tempNode, nodeLength);
+					RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength);
 					if (nearestNode) //if there is a node within the range of this node
 					{
-						if (BuildLine(tempNode, nearestNode))
+						if (BuildLine(&tempNode, nearestNode))
 						{
-							tempNode->SetParent(&rootNode);
-							nodeTree.push_back(*tempNode);
+							tempNode.SetParent(GetNearestNode(tempNode.GetNodePos(), INT_MAX));
+							nodeTree.push_back(tempNode);
 							return;
 						}
 					}
@@ -86,19 +86,19 @@ void RTT_Tree::GenerateNode(int nodeLength)
 
 	for (int i = 0; i < 20; i++) //seed 20 nodes
 	{
-		RTT_Node* tempNode = new RTT_Node();
+		RTT_Node& tempNode = RTT_Node();
 		sf::Vector2i randomPoint = sf::Vector2i(distributionX(generator), distributionY(generator)); //random point on the map
 		if (!IfExistingNode(randomPoint)) //if an existing node is not at this position and it is not the target node
 		{
-			if (tempNode->SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
+			if (tempNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 			{
-				RTT_Node* nearestNode = GetNearestNode(tempNode, nodeLength);
+				RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength);
 				if (nearestNode) //if there is a node within the range of this node
 				{
-					if (BuildLine(tempNode, nearestNode))
+					if (BuildLine(&tempNode, nearestNode))
 					{
-						tempNode->SetParent(&rootNode);
-						nodeTree.push_back(*tempNode);
+						tempNode.SetParent(GetNearestNode(tempNode.GetNodePos(), INT_MAX));
+						nodeTree.push_back(tempNode);
 						return;
 					}
 				}
@@ -191,19 +191,22 @@ RTT_Node* RTT_Tree::GetNearestNode(RTT_Node* searchingNode, int maxDistance)
 	return winner;
 }
 
-RTT_Node* RTT_Tree::GetNearestNode(sf::Vector2i position, int maxDistance)
+unsigned int RTT_Tree::GetNearestNode(sf::Vector2i position, int maxDistance)
 {
-	RTT_Node* winner = nullptr;
+	unsigned int winnerPos = NULL;
 	int manDist = INT_MAX;
 	for (RTT_Node& node : nodeTree)
 	{
-		if (manhattanDistance(node.GetNodePos(), position) <= manDist)
+		for (unsigned int i = 0; i < nodeTree.size(); i++)
 		{
-			manDist = manhattanDistance(node.GetNodePos(), position);
-			winner = &node;
+			if (manhattanDistance(nodeTree[i].GetNodePos(), position) <= manDist)
+			{
+				manDist = manhattanDistance(nodeTree[i].GetNodePos(), position);
+				winnerPos = i;
+			}
 		}
 	}
-	return winner;
+	return winnerPos;
 }
 
 bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
@@ -265,10 +268,10 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 
 	RTT_Node* currentNode = destinationNode;
 
-	//while (currentNode->GetParent()->GetNodePos().x != rootNode.GetNodePos().x && currentNode->GetParent()->GetNodePos().y != rootNode.GetNodePos().y) //while we arent drawing to the root node
+	while (nodeTree[currentNode->GetParent()].GetNodePos().x != rootNode.GetNodePos().x && nodeTree[currentNode->GetParent()].GetNodePos().y != rootNode.GetNodePos().y) //while we arent drawing to the root node
 	{
 		sf::Vector2i pos1 = currentNode->GetNodePos();
-		sf::Vector2i pos2 = currentNode->GetParent()->GetNodePos();
+		sf::Vector2i pos2 = nodeTree[currentNode->GetParent()].GetNodePos();
 		const sf::Vector2i directionVector = pos2 - pos1;
 		const float magnitude = sqrt((directionVector.y * directionVector.y) + (directionVector.x * directionVector.x));
 		const sf::Vector2f unitVector = (sf::Vector2f)directionVector / magnitude;
@@ -299,7 +302,7 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 				}
 			}
 		}
-		currentNode = currentNode->GetParent();
+		currentNode = &nodeTree[currentNode->GetParent()];
 	}
 
 	pathTexture.update(pathTexturePixels);

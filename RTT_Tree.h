@@ -21,6 +21,7 @@ public:
 	void SetNewRoot(int x, int y, sf::RenderWindow* screen);
 	void SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen);
 	void GenerateNode(int nodeLength, sf::Vector2i goalNode);
+	inline std::vector<RTT_Node> GetTree(){ return nodeTree; }
 	void RTT_Tree::GenerateNode(int nodeLength);
 	void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);
@@ -30,7 +31,7 @@ public:
 #pragma region TreeNodeLookup_Lines
 	bool IfExistingNode(sf::Vector2i position);
 	RTT_Node* GetNearestNode(RTT_Node* searchingNode, int maxDistance);
-	RTT_Node* GetNearestNode(sf::Vector2i position, int maxDistance);
+	unsigned int GetNearestNode(sf::Vector2i position, int maxDistance);
 	bool BuildLine(RTT_Node* node1, RTT_Node* node2);
 	void BuildPath(RTT_Node* destinationNode);
 	inline void BeginDrawing(){ continueDrawing = true; targetReached = false; }
