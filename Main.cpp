@@ -31,7 +31,7 @@ int main()
 	//window.setFramerateLimit(0);
 	
 	srand(time(NULL));
-	MapMngr.LoadMap("maps/dungeon.map"); //load the map
+	MapMngr.LoadMap("maps/testMap2.map"); //load the map
 	sf::Clock WorldTickClock;
 
 	sf::Clock clock;
@@ -55,6 +55,22 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			if (event.type == sf::Event::MouseWheelMoved)
+			{
+				if (event.mouseWheel.delta >= 0)
+				{
+					MapDrwr.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
+					Tree.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
+				}
+				else
+				{
+					if (MapDrwr.GetZoomValue() != 1) //if we aren't zooming past the minimum scale
+					{
+						MapDrwr.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
+						Tree.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
+					}
+				}
+			}
 		}
 		#pragma endregion
 		#pragma region FPSCounter
@@ -73,11 +89,13 @@ int main()
 				FPSCounter++;
 		#pragma endregion
 
+		#pragma region Drawing&Input
 		window.clear(); //clear the window
 		
 		MapDrwr.DrawMap(&window); //draw the map texture
-		//if (TicksPerFrame >= 30)
+
 		InputMngr.InputCycle(&window); //take in inputs
+
 		if (Tree.IfDrawing())
 		{
 			Tree.GenerateNode(40);
@@ -87,6 +105,7 @@ int main()
 		Tree.DrawTree(&window); //draw the tree texture
 		window.draw(InputMngr.GetModeText());
 		window.display(); //call the display	
+		#pragma endregion
 	}
 	return 0;
 }
