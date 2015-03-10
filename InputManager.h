@@ -23,7 +23,6 @@ public:
 	void InputCycle(sf::RenderWindow* targetWindow);
 	inline bool GetMode(){ return inputMode; }
 	inline sf::Text GetModeText(){ return firstModeTest; }
-	sf::Vector2i lastGoalNode;
 private:
 	InputManager();
 

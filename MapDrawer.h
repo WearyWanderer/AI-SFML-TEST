@@ -36,7 +36,7 @@ public:
 		inline bool GetRedrawState(){ return needsRedraw; }
 	#pragma endregion
 
-	inline void SetZoom(int zoomToSet){ mapSprite.setScale(zoomToSet, zoomToSet); currentZoom = zoomToSet; }
+		inline void SetZoom(int zoomToSet){ mapSprite.setScale((float)zoomToSet, (float)zoomToSet); currentZoom = zoomToSet; }
 	inline int GetZoomValue(){ return currentZoom; };
 
 	sf::Sprite mapSprite;

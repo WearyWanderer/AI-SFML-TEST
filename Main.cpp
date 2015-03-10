@@ -30,7 +30,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(960, 720), "AndrewAyre AI Pathfinding Algorithm Test");
 	//window.setFramerateLimit(0);
 	
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	MapMngr.LoadMap("maps/testMap2.map"); //load the map
 	sf::Clock WorldTickClock;
 
@@ -57,14 +57,14 @@ int main()
 				window.close();
 			if (event.type == sf::Event::MouseWheelMoved)
 			{
-				if (event.mouseWheel.delta >= 0)
+				if (event.mouseWheel.delta >= 0) //if zooming in
 				{
 					MapDrwr.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
 					Tree.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
 				}
-				else
+				else //zooming out
 				{
-					if (MapDrwr.GetZoomValue() != 1) //if we aren't zooming past the minimum scale
+					if (MapDrwr.GetZoomValue() + event.mouseWheel.delta >= 1) //if we aren't zooming past the minimum scale (zoom down to scale 1)
 					{
 						MapDrwr.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
 						Tree.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);

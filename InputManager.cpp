@@ -82,6 +82,9 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 			{
 				leftMouseDown = true;
 				Tree.SetNewRoot(sf::Vector2i(mousePos.x, mousePos.y), targetWindow);
+				Tree.BeginDrawing();
+				Tree.GenerateNode(40, true);
+				Tree.InitTreeTexture(targetWindow);
 			}
 			else //pathfinding logic
 			{
@@ -100,23 +103,6 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 		if (!rightMouseDown)
 		{
 			rightMouseDown = true;
-
-			sf::Vector2i mousePos
-				(
-				(sf::Mouse::getPosition(*targetWindow).x + (targetWindow->getView().getCenter().x - (targetWindow->getView().getSize().x / 2))) / MapDrwr.GetZoomValue(),
-				(sf::Mouse::getPosition(*targetWindow).y + (targetWindow->getView().getCenter().y - (targetWindow->getView().getSize().y / 2))) / MapDrwr.GetZoomValue()
-				);
-
-#ifdef _DEBUG
-			std::cout << mousePos.x << " X-Pos" << std::endl;
-			std::cout << mousePos.y << " Y-Pos" << std::endl;
-#endif
-
-			Tree.BeginDrawing();
-			Tree.GenerateNode(40, mousePos);
-
-			lastGoalNode = mousePos;
-			Tree.InitTreeTexture(targetWindow);
 		}
 	}
 	else

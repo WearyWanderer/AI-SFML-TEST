@@ -20,13 +20,13 @@ public:
 
 	void SetNewRoot(int x, int y, sf::RenderWindow* screen);
 	void SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen);
-	void GenerateNode(int nodeLength, sf::Vector2i goalNode);
+	void GenerateNode(int nodeLength, bool withRoot);
 	inline std::vector<RTT_Node> GetTree(){ return nodeTree; }
-	void RTT_Tree::GenerateNode(int nodeLength);
-	void RTT_Tree::InitTreeTexture(sf::RenderWindow* screen);
+	void GenerateNode(int nodeLength);
+	void InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);
 	inline sf::Sprite GetLineSprite(){ return lineSprite; }
-	inline void SetZoom(int zoomToSet){ treeSprite.setScale(zoomToSet, zoomToSet); lineSprite.setScale(zoomToSet, zoomToSet); pathSprite.setScale(zoomToSet, zoomToSet); }
+	inline void SetZoom(int zoomToSet){ treeSprite.setScale((float)zoomToSet, (float)zoomToSet); lineSprite.setScale((float)zoomToSet, (float)zoomToSet); pathSprite.setScale((float)zoomToSet, (float)zoomToSet); }
 
 #pragma region TreeNodeLookup_Lines
 	bool IfExistingNode(sf::Vector2i position);

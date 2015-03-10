@@ -23,6 +23,8 @@ void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
 	{
 		pathTexturePixels[i] = 0;
 	}
+	lineTexture.update(lineTexturePixels);
+	pathTexture.update(pathTexturePixels);
 	InitTreeTexture(screen); //reinitilise the tree screen
 }
 
@@ -39,43 +41,57 @@ void RTT_Tree::SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen)
 	{
 		pathTexturePixels[i] = 0;
 	}
+	lineTexture.update(lineTexturePixels);
+	pathTexture.update(pathTexturePixels);
 	InitTreeTexture(screen);
 }
 
-void RTT_Tree::GenerateNode(int nodeLength, sf::Vector2i goalNode)
+void RTT_Tree::GenerateNode(int nodeLength, bool withRoot)
 {
-	RTT_Node goalNode_ = RTT_Node(0, 0);
-	if (goalNode_.SetNodePos(goalNode, MapMngr.GetMap(), MapMngr.GetMapRect()))
+	nodeTree.push_back(rootNode); //first node in the list
+
+	std::default_random_engine generator; //set up random generator for positions
+	std::uniform_int_distribution<int> distributionX(1, MapMngr.GetMapWidth());
+	std::uniform_int_distribution<int> distributionY(1, MapMngr.GetMapHeight());
+
+	for (int i = 0; i < 20; i++) //seed 20 nodes
 	{
-		nodeTree.push_back(rootNode); //first node in the list
-
-		std::default_random_engine generator; //set up random generator for positions
-		std::uniform_int_distribution<int> distributionX(1, MapMngr.GetMapWidth());
-		std::uniform_int_distribution<int> distributionY(1, MapMngr.GetMapHeight());
-
-		for (int i = 0; i < 20; i++) //seed 20 nodes
+		RTT_Node tempNode = RTT_Node();
+		sf::Vector2i randomPoint = sf::Vector2i(distributionX(generator), distributionY(generator)); //random point on the map
+		if (!IfExistingNode(randomPoint)) //if an existing node is not at this position and it is not the target node
 		{
-			RTT_Node tempNode = RTT_Node();
-			sf::Vector2i randomPoint = sf::Vector2i(distributionX(generator), distributionY(generator)); //random point on the map
-			if (!IfExistingNode(randomPoint)) //if an existing node is not at this position and it is not the target node
+			if (tempNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 			{
-				if (tempNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
+				RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength);
+				if (nearestNode) //if there is a node within the range of this node
 				{
-					RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength);
-					if (nearestNode) //if there is a node within the range of this node
+					if (BuildLine(&tempNode, nearestNode))
 					{
-						if (BuildLine(&tempNode, nearestNode))
-						{
-							tempNode.SetParent(GetNearestNode(tempNode.GetNodePos(), INT_MAX));
-							nodeTree.push_back(tempNode);
-							return;
-						}
+						tempNode.SetParent(GetNearestNode(tempNode.GetNodePos(), INT_MAX));
+						nodeTree.push_back(tempNode);
+						return;
+					}
+					else
+					{
+						i--;
 					}
 				}
+				else
+				{
+					i--;
+				}
 			}
+			else
+			{
+				i--;
+			}
+		}
+		else
+		{
 			i--;
 		}
 	}
+
 }
 
 void RTT_Tree::GenerateNode(int nodeLength)
@@ -101,10 +117,25 @@ void RTT_Tree::GenerateNode(int nodeLength)
 						nodeTree.push_back(tempNode);
 						return;
 					}
+					else
+					{
+						i--;
+					}
+				}
+				else
+				{
+					i--;
 				}
 			}
+			else
+			{
+				i--;
+			}
 		}
-		i--;
+		else
+		{
+			i--;
+		}
 	}
 }
 
@@ -215,7 +246,7 @@ bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 	sf::Vector2i pos2 = node2->GetNodePos();
 
 	const sf::Vector2i directionVector = pos2 - pos1;
-	const float magnitude = sqrt((directionVector.y * directionVector.y) + (directionVector.x * directionVector.x));
+	const float magnitude =(const float)sqrt((directionVector.y * directionVector.y) + (directionVector.x * directionVector.x));
 	const sf::Vector2f unitVector = (sf::Vector2f)directionVector / magnitude;
 
 	for (int i = 0; i < magnitude; i++)
@@ -231,27 +262,27 @@ bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 	{
 		sf::Vector2i arrayLoc(pos1 + (sf::Vector2i)((float)i * unitVector));
 		for (int i = 0; i < 4; i++)
+		{
+			switch (i)
 			{
-				switch (i)
-				{
-				case 0:
-					//r
-					lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
-					break;
-				case 1:
-					//g
-					lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
-					break;
-				case 2:
-					//b
-					lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
-					break;
-				case 3:
-					//a
-					lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
-					break;
-				}
+			case 0:
+				//r
+				lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
+				break;
+			case 1:
+				//g
+				lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
+				break;
+			case 2:
+				//b
+				lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
+				break;
+			case 3:
+				//a
+				lineTexturePixels[((arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x) * 4 + i] = 255;
+				break;
 			}
+		}
 	}
 
 	lineTexture.update(lineTexturePixels);
@@ -273,7 +304,7 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 		sf::Vector2i pos1 = currentNode->GetNodePos();
 		sf::Vector2i pos2 = nodeTree[currentNode->GetParent()].GetNodePos();
 		const sf::Vector2i directionVector = pos2 - pos1;
-		const float magnitude = sqrt((directionVector.y * directionVector.y) + (directionVector.x * directionVector.x));
+		const float magnitude =(const float)sqrt((directionVector.y * directionVector.y) + (directionVector.x * directionVector.x));
 		const sf::Vector2f unitVector = (sf::Vector2f)directionVector / magnitude;
 
 		for (int i = 0; i < magnitude; i++)
