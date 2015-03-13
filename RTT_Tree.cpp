@@ -299,7 +299,7 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 
 	RTT_Node* currentNode = destinationNode;
 
-	while (nodeTree[currentNode->GetParent()].GetNodePos().x != rootNode.GetNodePos().x && nodeTree[currentNode->GetParent()].GetNodePos().y != rootNode.GetNodePos().y) //while we arent drawing to the root node
+	while (currentNode->GetNodePos().x != rootNode.GetNodePos().x && currentNode->GetNodePos().y != rootNode.GetNodePos().y) //while we arent drawing to the root node
 	{
 		sf::Vector2i pos1 = currentNode->GetNodePos();
 		sf::Vector2i pos2 = nodeTree[currentNode->GetParent()].GetNodePos();
