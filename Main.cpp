@@ -102,7 +102,7 @@ int main()
 
 		if (Tree.IfDrawing())
 		{
-			Tree.GenerateNode(40);
+			Tree.GenerateNode(20);
 			Tree.InitTreeTexture(&window);
 		}
 

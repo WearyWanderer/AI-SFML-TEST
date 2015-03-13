@@ -1,4 +1,5 @@
 #include "RTT_Tree.h"
+#include <time.h>
 
 
 RTT_Tree::RTT_Tree(int rootX, int rootY)
@@ -50,7 +51,7 @@ void RTT_Tree::GenerateNode(int nodeLength, bool withRoot)
 {
 	nodeTree.push_back(rootNode); //first node in the list
 
-	std::default_random_engine generator; //set up random generator for positions
+	std::default_random_engine generator(time(NULL)); //set up random generator for positions
 	std::uniform_int_distribution<int> distributionX(1, MapMngr.GetMapWidth());
 	std::uniform_int_distribution<int> distributionY(1, MapMngr.GetMapHeight());
 
@@ -62,12 +63,12 @@ void RTT_Tree::GenerateNode(int nodeLength, bool withRoot)
 		{
 			if (tempNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 			{
-				RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength);
+				RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength, 3);
 				if (nearestNode) //if there is a node within the range of this node
 				{
 					if (BuildLine(&tempNode, nearestNode))
 					{
-						tempNode.SetParent(GetNearestNode(tempNode.GetNodePos(), INT_MAX));
+						tempNode.SetParent(GetNearestNode(tempNode.GetNodePos(), nodeLength, 3));
 						nodeTree.push_back(tempNode);
 						return;
 					}
@@ -96,7 +97,7 @@ void RTT_Tree::GenerateNode(int nodeLength, bool withRoot)
 
 void RTT_Tree::GenerateNode(int nodeLength)
 {
-	std::default_random_engine generator; //set up random generator for positions
+	std::default_random_engine generator(time(NULL)); //set up random generator for positions
 	std::uniform_int_distribution<int> distributionX(1, MapMngr.GetMapWidth());
 	std::uniform_int_distribution<int> distributionY(1, MapMngr.GetMapHeight());
 
@@ -108,12 +109,12 @@ void RTT_Tree::GenerateNode(int nodeLength)
 		{
 			if (tempNode.SetNodePos(randomPoint, MapMngr.GetMap(), MapMngr.GetMapRect())) //if it's a valid map point
 			{
-				RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength);
+				RTT_Node* nearestNode = GetNearestNode(&tempNode, nodeLength, 3);
 				if (nearestNode) //if there is a node within the range of this node
 				{
 					if (BuildLine(&tempNode, nearestNode))
 					{
-						tempNode.SetParent(GetNearestNode(tempNode.GetNodePos(), INT_MAX));
+						tempNode.SetParent(GetNearestNode(tempNode.GetNodePos(), nodeLength, 3));
 						nodeTree.push_back(tempNode);
 						return;
 					}
@@ -207,13 +208,13 @@ bool RTT_Tree::IfExistingNode(sf::Vector2i position)
 	return false;
 }
 
-RTT_Node* RTT_Tree::GetNearestNode(RTT_Node* searchingNode, int maxDistance)
+RTT_Node* RTT_Tree::GetNearestNode(RTT_Node* searchingNode, int maxDistance, int minDist)
 {
 	RTT_Node* winner = nullptr;
-	int manDist = INT_MAX;
+	int manDist = maxDistance;
 	for (RTT_Node& node : nodeTree)
 	{
-		if (manhattanDistance(node.GetNodePos(), searchingNode->GetNodePos()) <= manDist)
+		if (manhattanDistance(node.GetNodePos(), searchingNode->GetNodePos()) <= manDist && manhattanDistance(node.GetNodePos(), searchingNode->GetNodePos()) >= minDist)
 		{
 			manDist = manhattanDistance(node.GetNodePos(), searchingNode->GetNodePos());
 			winner = &node;
@@ -222,15 +223,15 @@ RTT_Node* RTT_Tree::GetNearestNode(RTT_Node* searchingNode, int maxDistance)
 	return winner;
 }
 
-unsigned int RTT_Tree::GetNearestNode(sf::Vector2i position, int maxDistance)
+unsigned int RTT_Tree::GetNearestNode(sf::Vector2i position, int maxDistance, int minDist)
 {
 	unsigned int winnerPos = NULL;
-	int manDist = INT_MAX;
+	int manDist = maxDistance;
 	for (RTT_Node& node : nodeTree)
 	{
 		for (unsigned int i = 0; i < nodeTree.size(); i++)
 		{
-			if (manhattanDistance(nodeTree[i].GetNodePos(), position) <= manDist)
+			if (manhattanDistance(nodeTree[i].GetNodePos(), position) <= manDist && manhattanDistance(node.GetNodePos(), position) >= minDist)
 			{
 				manDist = manhattanDistance(nodeTree[i].GetNodePos(), position);
 				winnerPos = i;

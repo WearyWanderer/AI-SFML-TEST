@@ -30,8 +30,8 @@ public:
 
 #pragma region TreeNodeLookup_Lines
 	bool IfExistingNode(sf::Vector2i position);
-	RTT_Node* GetNearestNode(RTT_Node* searchingNode, int maxDistance);
-	unsigned int GetNearestNode(sf::Vector2i position, int maxDistance);
+	RTT_Node* GetNearestNode(RTT_Node* searchingNode, int maxDistance, int minDist);
+	unsigned int GetNearestNode(sf::Vector2i position, int maxDistance, int minDist);
 	bool BuildLine(RTT_Node* node1, RTT_Node* node2);
 	void BuildPath(RTT_Node* destinationNode);
 	inline void BeginDrawing(){ continueDrawing = true; targetReached = false; }

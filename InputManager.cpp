@@ -88,13 +88,13 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 				leftMouseDown = true;
 				Tree.SetNewRoot(sf::Vector2i(mousePos.x, mousePos.y), targetWindow);
 				Tree.BeginDrawing();
-				Tree.GenerateNode(40, true);
+				Tree.GenerateNode(20, true);
 				Tree.InitTreeTexture(targetWindow);
 			}
 			else //pathfinding logic
 			{
 				leftMouseDown = true;
-				Tree.BuildPath(&Tree.GetTree()[Tree.GetNearestNode(mousePos, INT_MAX)]);
+				Tree.BuildPath(&Tree.GetTree()[Tree.GetNearestNode(mousePos, INT_MAX, 0)]);
 			}
 		}
 	}
