@@ -55,22 +55,26 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			if (event.type == sf::Event::MouseWheelMoved)
-			{
-				if (event.mouseWheel.delta >= 0) //if zooming in
-				{
-					MapDrwr.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
-					Tree.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
-				}
-				else //zooming out
-				{
-					if (MapDrwr.GetZoomValue() + event.mouseWheel.delta >= 1) //if we aren't zooming past the minimum scale (zoom down to scale 1)
-					{
-						MapDrwr.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
-						Tree.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
-					}
-				}
-			}
+
+#pragma region mouseWheelScroll, removed for button zoom
+			//if (event.type == sf::Event::MouseWheelMoved)
+			//{
+			//	if (event.mouseWheel.delta >= 0) //if zooming in
+			//	{
+			//		MapDrwr.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
+			//		Tree.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
+			//	}
+			//	else //zooming out
+			//	{
+			//		if (MapDrwr.GetZoomValue() + event.mouseWheel.delta >= 1) //if we aren't zooming past the minimum scale (zoom down to scale 1)
+			//		{
+			//			MapDrwr.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
+			//			Tree.SetZoom(MapDrwr.GetZoomValue() + event.mouseWheel.delta);
+			//		}
+			//	}
+			//}
+#pragma endregion
+
 		}
 		#pragma endregion
 		#pragma region FPSCounter

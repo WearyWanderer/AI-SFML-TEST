@@ -60,6 +60,11 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 		MapDrwr.SetZoom(Zoomx3);
 		Tree.SetZoom(Zoomx3);
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+	{
+		MapDrwr.SetZoom(5);
+		Tree.SetZoom(5);
+	}
 #pragma endregion
 
 #pragma region mapClickControls
@@ -96,18 +101,6 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow)
 	else
 	{
 		leftMouseDown = false;
-	}
-
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-	{
-		if (!rightMouseDown)
-		{
-			rightMouseDown = true;
-		}
-	}
-	else
-	{
-		rightMouseDown = false;
 	}
 #pragma endregion
 
