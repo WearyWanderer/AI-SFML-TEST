@@ -12,6 +12,7 @@
 #include <time.h>
 #include <SFML/Graphics.hpp>
 
+#include "StateManager.h"
 #include "MapLoader.h"
 #include "MapDrawer.h"
 #include "InputManager.h"
@@ -46,6 +47,8 @@ int main()
 
 	MapDrwr.InitMapTexture(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth()); //create the map into a texture
 	Tree.screen = &window;
+
+	StateManager stateMngr;
 
 	while (window.isOpen())
 	{
@@ -84,7 +87,9 @@ int main()
 
 				if (TicksPerFrame >= 500)
 				{
+#ifdef _DEBUG
 					std::cout << FPSCounter << std::endl;
+#endif
 					FPSCounter = 0;
 
 					TicksPerFrame = 0;
@@ -95,19 +100,28 @@ int main()
 
 		#pragma region Drawing&Input
 		window.clear(); //clear the window
+
+		if (stateMngr.GetState() == 1)
+		{ 
 		
-		MapDrwr.DrawMap(&window); //draw the map texture
-
-		InputMngr.InputCycle(&window); //take in inputs
-
-		if (Tree.IfDrawing())
+		}
+		else
 		{
-			Tree.GenerateNode(20);
-			Tree.InitTreeTexture(&window);
+
+			MapDrwr.DrawMap(&window); //draw the map texture
+
+			InputMngr.InputCycle(&window); //take in inputs
+
+			if (Tree.IfDrawing())
+			{
+				Tree.GenerateNode(20);
+				Tree.InitTreeTexture(&window);
+			}
+
+			Tree.DrawTree(&window); //draw the tree texture
+			window.draw(InputMngr.GetModeText());
 		}
 
-		Tree.DrawTree(&window); //draw the tree texture
-		window.draw(InputMngr.GetModeText());
 		window.display(); //call the display	
 		#pragma endregion
 	}
