@@ -48,7 +48,7 @@ int main()
 	MapDrwr.InitMapTexture(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth()); //create the map into a texture
 	Tree.screen = &window;
 
-	StateManager stateMngr;
+	StateManager* mystateMngr = new StateManager();
 
 	while (window.isOpen())
 	{
@@ -98,32 +98,7 @@ int main()
 				FPSCounter++;
 		#pragma endregion
 
-		#pragma region Drawing&Input
-		window.clear(); //clear the window
-
-		if (stateMngr.GetState() == 1)
-		{ 
-		
-		}
-		else
-		{
-
-			MapDrwr.DrawMap(&window); //draw the map texture
-
-			InputMngr.InputCycle(&window); //take in inputs
-
-			if (Tree.IfDrawing())
-			{
-				Tree.GenerateNode(20);
-				Tree.InitTreeTexture(&window);
-			}
-
-			Tree.DrawTree(&window); //draw the tree texture
-			window.draw(InputMngr.GetModeText());
-		}
-
-		window.display(); //call the display	
-		#pragma endregion
+		mystateMngr->MainLoop(&window);
 	}
 	return 0;
 }

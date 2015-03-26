@@ -23,6 +23,8 @@ public:
 	void InputCycle(sf::RenderWindow* targetWindow);
 	inline bool GetMode(){ return inputMode; }
 	inline sf::Text GetModeText(){ return firstModeTest; }
+
+	sf::Font defaultFont; //publicly accessible by other systems, i.e state manager, simply left here because it was intially developed here
 private:
 	InputManager();
 
@@ -34,7 +36,7 @@ private:
 	bool modeToggleDown = false;
 
 	bool inputMode = true; //true is mapping mode, false is pathfinding mode
-	sf::Font defaultFont;
+	
 	sf::Text firstModeTest;
 };
 
