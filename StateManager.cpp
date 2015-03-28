@@ -43,11 +43,6 @@ StateManager::StateManager()
 #pragma endregion
 }
 
-
-StateManager::~StateManager()
-{
-}
-
 void StateManager::MainLoop(sf::RenderWindow* window)
 {
 	window->clear(); //clear the window
@@ -59,17 +54,32 @@ void StateManager::MainLoop(sf::RenderWindow* window)
 		window->draw(headerText); //draw the title
 		for (int i = 0; i < mapList.size(); i++)
 		{
-			mapListText.setString(mapList[i]);
-			mapListText.setPosition(315, 200 + (i * 30));
-			window->draw(mapListText);
+			if (selectedMap == i)
+			{
+				mapListText.setColor(sf::Color::Red);
+				mapListText.setString(mapList[i].substr(0, mapList[i].length() - 4));
+				mapListText.setPosition(365, 200 + (i * 30));
+				window->draw(mapListText);
+				mapListText.setColor(sf::Color::White);
+			}
+			else
+			{
+				mapListText.setString(mapList[i].substr(0, mapList[i].length() - 4));
+				mapListText.setPosition(365, 200 + (i * 30));
+				window->draw(mapListText);
+			}
+			
 		}
+
+		InputMngr.InputCycle(window, mainMenu); //take in inputs
+
 		break;
 	}
 	case mapMode:
 	{
 		MapDrwr.DrawMap(window); //draw the map texture
 
-		InputMngr.InputCycle(window); //take in inputs
+		InputMngr.InputCycle(window, mapMode); //take in inputs
 
 		if (Tree.IfDrawing())
 		{

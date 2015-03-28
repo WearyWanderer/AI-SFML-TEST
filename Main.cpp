@@ -19,11 +19,9 @@
 #include "ViewManager.h"
 #include "RTT_Tree.h"
 
-#define MapMngr MapLoader::getInstance()
-#define MapDrwr MapDrawer::getInstance()
-#define InputMngr InputManager::getInstance()
 #define ViewMngr ViewManager::getInstance()
 #define Tree RTT_Tree::getInstance()
+#define Game StateManager::getInstance()
 
 int main()
 {
@@ -32,7 +30,6 @@ int main()
 	//window.setFramerateLimit(0);
 	
 	srand((unsigned int)time(NULL));
-	MapMngr.LoadMap("maps/testMap2.map"); //load the map
 	sf::Clock WorldTickClock;
 
 	sf::Clock clock;
@@ -44,12 +41,8 @@ int main()
 	ViewMngr.SetView(sf::FloatRect(0, 0, 960, 720));
 
 	window.setView(ViewMngr.GetView());
-
-	MapDrwr.InitMapTexture(&window, MapMngr.GetMap(), MapMngr.GetMapHeight(), MapMngr.GetMapWidth()); //create the map into a texture
 	Tree.screen = &window;
-
-	StateManager* mystateMngr = new StateManager();
-
+	
 	while (window.isOpen())
 	{
 		#pragma region windowCloser
@@ -98,7 +91,7 @@ int main()
 				FPSCounter++;
 		#pragma endregion
 
-		mystateMngr->MainLoop(&window);
+		Game.MainLoop(&window);
 	}
 	return 0;
 }

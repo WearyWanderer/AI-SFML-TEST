@@ -5,10 +5,18 @@
 #include "MapDrawer.h"
 #include "ViewManager.h"
 #include "RTT_Tree.h"
+#include "StateManager.h"
 
 #define MapDrwr MapDrawer::getInstance()
 #define ViewMngr ViewManager::getInstance()
 #define Tree RTT_Tree::getInstance()
+#define Game StateManager::getInstance()
+
+enum states
+{
+	mainMenu = 1,
+	mapMode = 2
+};
 
 class InputManager
 {
@@ -20,7 +28,7 @@ public:
 		return instance;
 	}
 
-	void InputCycle(sf::RenderWindow* targetWindow);
+	void InputCycle(sf::RenderWindow* targetWindow, int enumState);
 	inline bool GetMode(){ return inputMode; }
 	inline sf::Text GetModeText(){ return firstModeTest; }
 
@@ -34,6 +42,8 @@ private:
 
 	bool leftMouseDown = false;
 	bool modeToggleDown = false;
+	bool upKeyDown = false;
+	bool downKeyDown = false;
 
 	bool inputMode = true; //true is mapping mode, false is pathfinding mode
 	

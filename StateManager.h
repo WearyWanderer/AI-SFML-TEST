@@ -20,25 +20,35 @@
 #define ViewMngr ViewManager::getInstance()
 #define Tree RTT_Tree::getInstance()
 
-enum states
-{
-	mainMenu = 1,
-	mapMode = 2
-};
-
 class StateManager
 {
 public:
-	StateManager();
-	~StateManager();
+	static StateManager& getInstance()
+	{
+		static StateManager instance;
+		// Instantiated on first use.
+		return instance;
+	}
+
 
 	inline void SwitchState(int newState){ currentState = newState; }
 
+	inline void SwitchMapSel(int map){ selectedMap += map; }
+
 	inline int GetState(){ return currentState; }
+
+	inline int GetMap(){ return selectedMap; }
 
 	void MainLoop(sf::RenderWindow* window);
 
+	std::vector<std::string> mapList;
 private:
+	StateManager();
+
+	// technique of deleting the methods we don't want.
+	StateManager(StateManager const&) = delete;
+	void operator=(StateManager const&) = delete;
+
 	std::string mapLocExt = "\\maps\\*.txt";
 	int currentState = 1;
 
@@ -49,7 +59,6 @@ private:
 		return wString;
 	}
 
-	std::vector<std::string> mapList;
 	sf::Text mapListText;
 	sf::Text headerText;
 	int selectedMap = 0;

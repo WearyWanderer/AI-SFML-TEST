@@ -6,9 +6,15 @@ RTT_Tree::RTT_Tree(int rootX, int rootY)
 {
 	rootNode = RTT_Node(rootX, rootY);
 	rootNode.SetParent(0);
+}
+
+void RTT_Tree::InitTexts()
+{
 	treeTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
 	lineTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
 	pathTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
+	lineTexturePixels.resize(MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4);
+	pathTexturePixels.resize(MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4);
 }
 
 void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
@@ -24,8 +30,8 @@ void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
 	{
 		pathTexturePixels[i] = 0;
 	}
-	lineTexture.update(lineTexturePixels);
-	pathTexture.update(pathTexturePixels);
+	lineTexture.update(lineTexturePixels.data());
+	pathTexture.update(pathTexturePixels.data());
 	InitTreeTexture(screen); //reinitilise the tree screen
 }
 
@@ -42,8 +48,8 @@ void RTT_Tree::SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen)
 	{
 		pathTexturePixels[i] = 0;
 	}
-	lineTexture.update(lineTexturePixels);
-	pathTexture.update(pathTexturePixels);
+	lineTexture.update(lineTexturePixels.data());
+	pathTexture.update(pathTexturePixels.data());
 	InitTreeTexture(screen);
 }
 
@@ -286,7 +292,7 @@ bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 		}
 	}
 
-	lineTexture.update(lineTexturePixels);
+	lineTexture.update(lineTexturePixels.data());
 	lineSprite.setTexture(lineTexture);
 	return true;
 }
@@ -337,7 +343,7 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 		currentNode = &nodeTree[currentNode->GetParent()];
 	}
 
-	pathTexture.update(pathTexturePixels);
+	pathTexture.update(pathTexturePixels.data());
 	pathSprite.setTexture(pathTexture);
 }
 

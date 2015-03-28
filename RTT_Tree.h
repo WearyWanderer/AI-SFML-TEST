@@ -18,6 +18,7 @@ public:
 		return instance;
 	}
 
+	void InitTexts();
 	void SetNewRoot(int x, int y, sf::RenderWindow* screen);
 	void SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen);
 	void GenerateNode(int nodeLength, bool withRoot);
@@ -60,9 +61,7 @@ private:
 	sf::Texture pathTexture;
 	sf::Sprite pathSprite;
 
-	sf::Uint8* lineTexturePixels = new sf::Uint8[MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4];
-	sf::Uint8* pathTexturePixels = new sf::Uint8[MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4];
-	
-	
+	std::vector<sf::Uint8> lineTexturePixels;
+	std::vector<sf::Uint8> pathTexturePixels;
 };
 
