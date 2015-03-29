@@ -89,6 +89,12 @@ void StateManager::MainLoop(sf::RenderWindow* window)
 
 		Tree.DrawTree(window); //draw the tree texture
 		window->draw(InputMngr.GetModeText());
+
+		if (Tree.pathDrawn)
+		{
+			
+		}
+
 		break;
 	}
 	default:

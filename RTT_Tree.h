@@ -27,7 +27,16 @@ public:
 	void InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);
 	inline sf::Sprite GetLineSprite(){ return lineSprite; }
-	inline void SetZoom(int zoomToSet){ treeSprite.setScale((float)zoomToSet, (float)zoomToSet); lineSprite.setScale((float)zoomToSet, (float)zoomToSet); pathSprite.setScale((float)zoomToSet, (float)zoomToSet); }
+	inline void SetZoom(int zoomToSet)
+	{ 
+		treeSprite.setScale((float)zoomToSet, (float)zoomToSet); 
+		lineSprite.setScale((float)zoomToSet, (float)zoomToSet); 
+		pathSprite.setScale((float)zoomToSet, (float)zoomToSet);
+		agentSprite.setScale((float)zoomToSet / 15, (float)zoomToSet / 15);
+		zoomSet = zoomToSet;
+		agentSprite.setPosition((rootNode.GetNodePos().x - 2) * zoomSet, (rootNode.GetNodePos().y - 2) * zoomSet);
+	}
+	void SetSpriteRelativePos(int x, int y);
 
 #pragma region TreeNodeLookup_Lines
 	bool IfExistingNode(sf::Vector2i position);
@@ -41,6 +50,7 @@ public:
 	int manhattanDistance(sf::Vector2i pos, sf::Vector2i pos2);
 #pragma endregion
 
+	bool pathDrawn = false;
 	sf::RenderWindow* screen;
 private:
 	RTT_Tree(int rootX, int rootY);
@@ -53,6 +63,7 @@ private:
 	std::vector<RTT_Node> nodeTree;
 	bool targetReached = true;
 	bool continueDrawing = false;
+	int zoomSet = 1;
 
 	sf::Texture treeTexture;
 	sf::Sprite treeSprite;
@@ -60,6 +71,9 @@ private:
 	sf::Sprite lineSprite;
 	sf::Texture pathTexture;
 	sf::Sprite pathSprite;
+
+	sf::Texture agentTexture;
+	sf::Sprite agentSprite;
 
 	std::vector<sf::Uint8> lineTexturePixels;
 	std::vector<sf::Uint8> pathTexturePixels;
