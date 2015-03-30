@@ -58,14 +58,14 @@ void StateManager::MainLoop(sf::RenderWindow* window)
 			{
 				mapListText.setColor(sf::Color::Red);
 				mapListText.setString(mapList[i].substr(0, mapList[i].length() - 4));
-				mapListText.setPosition(365, 200 + (i * 30));
+				mapListText.setPosition((float)365,(float) 200 + (i * 30));
 				window->draw(mapListText);
 				mapListText.setColor(sf::Color::White);
 			}
 			else
 			{
 				mapListText.setString(mapList[i].substr(0, mapList[i].length() - 4));
-				mapListText.setPosition(365, 200 + (i * 30));
+				mapListText.setPosition((float)365,(float) 200 + (i * 30));
 				window->draw(mapListText);
 			}
 			
@@ -90,7 +90,7 @@ void StateManager::MainLoop(sf::RenderWindow* window)
 		Tree.DrawTree(window); //draw the tree texture
 		window->draw(InputMngr.GetModeText());
 
-		if (Tree.pathDrawn)
+		if (Tree.pathfindingAgent.pathDrawn)
 		{
 			
 		}

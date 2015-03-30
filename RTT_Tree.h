@@ -5,6 +5,7 @@
 #include <sfml\Graphics.hpp>
 #include "RTT_Node.h"
 #include "MapLoader.h"
+#include "Agent.hpp"
 
 #define MapMngr MapLoader::getInstance()
 
@@ -23,6 +24,7 @@ public:
 	void SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen);
 	void GenerateNode(int nodeLength, bool withRoot);
 	inline std::vector<RTT_Node> GetTree(){ return nodeTree; }
+	inline RTT_Node GetRoot(){ return rootNode; }
 	void GenerateNode(int nodeLength);
 	void InitTreeTexture(sf::RenderWindow* screen);
 	void DrawTree(sf::RenderWindow* screen);
@@ -32,11 +34,11 @@ public:
 		treeSprite.setScale((float)zoomToSet, (float)zoomToSet); 
 		lineSprite.setScale((float)zoomToSet, (float)zoomToSet); 
 		pathSprite.setScale((float)zoomToSet, (float)zoomToSet);
-		agentSprite.setScale((float)zoomToSet / 15, (float)zoomToSet / 15);
+		pathfindingAgent.agentSprite.setScale((float)zoomToSet / 15, (float)zoomToSet / 15);
+		pathfindingAgent.agentSprite.setPosition((rootNode.GetNodePos().x - 2) * zoomToSet, (rootNode.GetNodePos().y - 2) * zoomToSet);
 		zoomSet = zoomToSet;
-		agentSprite.setPosition((rootNode.GetNodePos().x - 2) * zoomSet, (rootNode.GetNodePos().y - 2) * zoomSet);
 	}
-	void SetSpriteRelativePos(int x, int y);
+
 
 #pragma region TreeNodeLookup_Lines
 	bool IfExistingNode(sf::Vector2i position);
@@ -50,7 +52,7 @@ public:
 	int manhattanDistance(sf::Vector2i pos, sf::Vector2i pos2);
 #pragma endregion
 
-	bool pathDrawn = false;
+	Agent pathfindingAgent;
 	sf::RenderWindow* screen;
 private:
 	RTT_Tree(int rootX, int rootY);
@@ -71,9 +73,6 @@ private:
 	sf::Sprite lineSprite;
 	sf::Texture pathTexture;
 	sf::Sprite pathSprite;
-
-	sf::Texture agentTexture;
-	sf::Sprite agentSprite;
 
 	std::vector<sf::Uint8> lineTexturePixels;
 	std::vector<sf::Uint8> pathTexturePixels;

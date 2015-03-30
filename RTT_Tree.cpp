@@ -13,15 +13,13 @@ void RTT_Tree::InitTexts()
 	treeTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
 	lineTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
 	pathTexture.create(MapMngr.GetMapWidth(), MapMngr.GetMapHeight());
-	agentTexture.loadFromFile("tex/Agent.png");
-	agentSprite.setTexture(agentTexture);
 	lineTexturePixels.resize(MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4);
 	pathTexturePixels.resize(MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4);
 }
 
 void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
 {
-	pathDrawn = false; //reset from any sprite agent drawing
+	pathfindingAgent.pathDrawn = false; //reset from any sprite agent drawing
 	rootNode.SetNodePos(sf::Vector2i(x, y), MapMngr.GetMap(), MapMngr.GetMapRect());
 	nodeTree.clear(); //empty the old tree
 	continueDrawing = false;
@@ -40,7 +38,7 @@ void RTT_Tree::SetNewRoot(int x, int y, sf::RenderWindow* screen)
 
 void RTT_Tree::SetNewRoot(sf::Vector2i pos, sf::RenderWindow* screen)
 {
-	pathDrawn = false; //reset from any sprite agent drawing
+	pathfindingAgent.pathDrawn = false; //reset from any sprite agent drawing
 	rootNode.SetNodePos(pos, MapMngr.GetMap(), MapMngr.GetMapRect());
 	nodeTree.clear(); //empty the old tree
 	continueDrawing = false;
@@ -61,7 +59,7 @@ void RTT_Tree::GenerateNode(int nodeLength, bool withRoot)
 {
 	nodeTree.push_back(rootNode); //first node in the list
 
-	std::default_random_engine generator(time(NULL)); //set up random generator for positions
+	std::default_random_engine generator((unsigned int)time(NULL)); //set up random generator for positions
 	std::uniform_int_distribution<int> distributionX(1, MapMngr.GetMapWidth());
 	std::uniform_int_distribution<int> distributionY(1, MapMngr.GetMapHeight());
 
@@ -107,7 +105,7 @@ void RTT_Tree::GenerateNode(int nodeLength, bool withRoot)
 
 void RTT_Tree::GenerateNode(int nodeLength)
 {
-	std::default_random_engine generator(time(NULL)); //set up random generator for positions
+	std::default_random_engine generator((unsigned int)time(NULL)); //set up random generator for positions
 	std::uniform_int_distribution<int> distributionX(1, MapMngr.GetMapWidth());
 	std::uniform_int_distribution<int> distributionY(1, MapMngr.GetMapHeight());
 
@@ -200,8 +198,8 @@ void RTT_Tree::DrawTree(sf::RenderWindow* screen) //add the RTT_Tree to the draw
 	screen->draw(treeSprite);
 	screen->draw(pathSprite);
 
-	if (pathDrawn) //if we're animating a agent's path along a branch, draw the agent
-		screen->draw(agentSprite);
+	if (pathfindingAgent.pathDrawn) //if we're animating a agent's path along a branch, draw the agent
+		screen->draw(pathfindingAgent.agentSprite);
 }
 
 bool SortTree(RTT_Node* e1, RTT_Node* e2)
@@ -306,14 +304,14 @@ bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 
 void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 {
-	
+	pathfindingAgent.pathDrawn = true;
+	pathfindingAgent.SetSpriteRelativePos((rootNode.GetNodePos().x - 2) * zoomSet, (rootNode.GetNodePos().y - 2) * zoomSet);
 	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++) //remove existing path
 	{
 		pathTexturePixels[i] = 0;
 	}
 
 	RTT_Node* currentNode = destinationNode; //get a pointer to the node we are recursively searching from
-	SetSpriteRelativePos(rootNode.GetNodePos().x, rootNode.GetNodePos().y);
 
 #pragma region Drawing
 	while (currentNode->GetNodePos().x != rootNode.GetNodePos().x && currentNode->GetNodePos().y != rootNode.GetNodePos().y) //while we arent drawing to the root node
@@ -356,7 +354,6 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 
 	pathTexture.update(pathTexturePixels.data()); //update the texture buffer to contain this new path
 	pathSprite.setTexture(pathTexture);
-	pathDrawn = true; //set the path to finished drawing and begin animating sprite agent path along
 }
 
 int RTT_Tree::manhattanDistance(sf::Vector2i pos, sf::Vector2i pos2)
@@ -373,11 +370,4 @@ int RTT_Tree::manhattanDistance(sf::Vector2i pos, sf::Vector2i pos2)
 	}
 
 	return x + y;
-}
-
-void RTT_Tree::SetSpriteRelativePos(int x, int y)
-{
-	int offsetX = (x - 2);
-	int offsetY = (y - 2);
-	agentSprite.setPosition(offsetX * zoomSet, offsetY * zoomSet);
 }
