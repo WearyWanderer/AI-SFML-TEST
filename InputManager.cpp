@@ -31,7 +31,7 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow, int enumState)
 					Game.SwitchMapSel(1);
 				downKeyDown = true;
 			}
-			}
+		}
 		else
 			downKeyDown = false;
 

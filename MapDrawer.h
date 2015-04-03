@@ -5,7 +5,6 @@
 #include <fstream>
 #include <algorithm>
 #include <vector>
-#include <sfml\System\Vector2.hpp>
 #include <sfml\Graphics.hpp>
 #include "ViewManager.h"
 #include "MapLoader.h"

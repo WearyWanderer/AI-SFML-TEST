@@ -50,8 +50,8 @@ bool RTT_Node::SetNodePos(sf::Vector2i newPos, Tile mapInfo[], sf::IntRect bound
 				std::cout << mapInfo[arrayPoint].x << std::endl;
 				std::cout << mapInfo[arrayPoint].y << std::endl;
 				std::cout << "Hit Collision Wall" << std::endl;
-				return false;
 			#endif
+				return false;
 		}
 		else
 		{

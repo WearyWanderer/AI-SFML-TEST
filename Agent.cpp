@@ -1,6 +1,5 @@
 #include "Agent.hpp"
 
-
 Agent::Agent()
 {
 	agentTexture.loadFromFile("tex/Agent.png");

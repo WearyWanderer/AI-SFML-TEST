@@ -52,7 +52,7 @@ void StateManager::MainLoop(sf::RenderWindow* window)
 	case mainMenu:
 	{
 		window->draw(headerText); //draw the title
-		for (int i = 0; i < mapList.size(); i++)
+		for (unsigned int i = 0; i < mapList.size(); i++)
 		{
 			if (selectedMap == i)
 			{

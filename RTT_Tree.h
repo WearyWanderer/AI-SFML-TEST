@@ -35,10 +35,10 @@ public:
 		lineSprite.setScale((float)zoomToSet, (float)zoomToSet); 
 		pathSprite.setScale((float)zoomToSet, (float)zoomToSet);
 		pathfindingAgent.agentSprite.setScale((float)zoomToSet / 15, (float)zoomToSet / 15);
-		pathfindingAgent.agentSprite.setPosition((rootNode.GetNodePos().x - 2) * zoomToSet, (rootNode.GetNodePos().y - 2) * zoomToSet);
+		pathfindingAgent.agentSprite.setPosition(((float)rootNode.GetNodePos().x - 2) * zoomToSet, ((float)rootNode.GetNodePos().y - 2) * zoomToSet);
 		zoomSet = zoomToSet;
 	}
-
+	void MoveAgents();
 
 #pragma region TreeNodeLookup_Lines
 	bool IfExistingNode(sf::Vector2i position);

@@ -306,6 +306,7 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 {
 	pathfindingAgent.pathDrawn = true;
 	pathfindingAgent.SetSpriteRelativePos((rootNode.GetNodePos().x - 2) * zoomSet, (rootNode.GetNodePos().y - 2) * zoomSet);
+	pathfindingAgent.nodesToFollow.insert(pathfindingAgent.nodesToFollow.begin(), rootNode.GetNodePos()); //root node position becomes the starting position for agents path
 	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++) //remove existing path
 	{
 		pathTexturePixels[i] = 0;
@@ -348,6 +349,7 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 				}
 			}
 		}
+		pathfindingAgent.nodesToFollow.insert(pathfindingAgent.nodesToFollow.begin() + 1, currentNode->GetNodePos()); //push all these nodes into the nodes list, so that the list goes from root to the end location (root is the first element)
 		currentNode = &nodeTree[currentNode->GetParent()];
 	}
 #pragma endregion
@@ -370,4 +372,9 @@ int RTT_Tree::manhattanDistance(sf::Vector2i pos, sf::Vector2i pos2)
 	}
 
 	return x + y;
+}
+
+void RTT_Tree::MoveAgents()
+{
+	
 }
