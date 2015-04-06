@@ -37,6 +37,7 @@ bool RTT_Node::SetNodePos(int x, int y, Tile mapInfo[], sf::IntRect boundsRect)
 			return true;
 		}
 	}
+	return false;
 }
 
 bool RTT_Node::SetNodePos(sf::Vector2i newPos, Tile mapInfo[], sf::IntRect boundsRect)

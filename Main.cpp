@@ -23,6 +23,8 @@
 #define Tree RTT_Tree::getInstance()
 #define Game StateManager::getInstance()
 
+float getFPS(const sf::Time& time);
+
 int main()
 {
 
@@ -30,14 +32,11 @@ int main()
 	//window.setFramerateLimit(0);
 	
 	srand((unsigned int)time(NULL));
-	sf::Clock WorldTickClock;
-
-	sf::Clock clock;
-	sf::Time elapsed;
-	sf::Int32 TicksPerFrame = 0;
-
-	int FPSCounter = 0;
-
+	sf::Clock FPSClock;
+	sf::Clock tickClock;
+	float fps = 0;
+	float timerCurrent = 0.f;
+	float timerTotal = 0.02f;
 	ViewMngr.SetView(sf::FloatRect(0, 0, 960, 720));
 
 	window.setView(ViewMngr.GetView());
@@ -73,25 +72,25 @@ int main()
 
 		}
 		#pragma endregion
-		#pragma region FPSCounter
-				//Fixed this
-				elapsed = clock.restart();
-				TicksPerFrame += elapsed.asMilliseconds();
 
-				if (TicksPerFrame >= 500)
-				{
-#ifdef _DEBUG
-					std::cout << FPSCounter << std::endl;
+		if (timerCurrent >= timerTotal)
+		{
+			Game.AILoop(&window);
+			timerCurrent -= timerTotal;
+#ifdef _DEBUG		
+			std::cout << fps << std::endl;
 #endif
-					FPSCounter = 0;
-
-					TicksPerFrame = 0;
-					WorldTickClock.restart();
-				}
-				FPSCounter++;
-		#pragma endregion
+		}
 
 		Game.MainLoop(&window);
+		
+		fps = getFPS(FPSClock.restart());
+		timerCurrent += tickClock.restart().asSeconds();
 	}
 	return 0;
+}
+
+float getFPS(const sf::Time& time) 
+{
+	return (1000000.0f / time.asMicroseconds());
 }

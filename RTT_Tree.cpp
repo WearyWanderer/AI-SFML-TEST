@@ -306,7 +306,10 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 {
 	pathfindingAgent.pathDrawn = true;
 	pathfindingAgent.SetSpriteRelativePos((rootNode.GetNodePos().x - 2) * zoomSet, (rootNode.GetNodePos().y - 2) * zoomSet);
+	pathfindingAgent.nodesToFollow.clear();
 	pathfindingAgent.nodesToFollow.insert(pathfindingAgent.nodesToFollow.begin(), rootNode.GetNodePos()); //root node position becomes the starting position for agents path
+	pathfindingAgent.lastNodePos = rootNode.GetNodePos(); //set the last pos at the root node
+
 	for (int i = 0; i < MapMngr.GetMapWidth() * MapMngr.GetMapHeight() * 4; i++) //remove existing path
 	{
 		pathTexturePixels[i] = 0;
@@ -353,6 +356,8 @@ void RTT_Tree::BuildPath(RTT_Node* destinationNode)
 		currentNode = &nodeTree[currentNode->GetParent()];
 	}
 #pragma endregion
+
+	pathfindingAgent.GenerateStraightPath(); //define the first path the agent should be taking
 
 	pathTexture.update(pathTexturePixels.data()); //update the texture buffer to contain this new path
 	pathSprite.setTexture(pathTexture);

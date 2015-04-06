@@ -90,11 +90,6 @@ void StateManager::MainLoop(sf::RenderWindow* window)
 		Tree.DrawTree(window); //draw the tree texture
 		window->draw(InputMngr.GetModeText());
 
-		if (Tree.pathfindingAgent.pathDrawn)
-		{
-			
-		}
-
 		break;
 	}
 	default:
@@ -102,4 +97,12 @@ void StateManager::MainLoop(sf::RenderWindow* window)
 	}
 
 	window->display(); //call the display	
+}
+
+void StateManager::AILoop(sf::RenderWindow* window)
+{
+	if (Tree.pathfindingAgent.pathDrawn)
+	{
+		Tree.pathfindingAgent.ProgressForward();
+	}
 }

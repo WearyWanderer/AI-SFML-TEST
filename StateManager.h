@@ -40,6 +40,7 @@ public:
 	inline int GetMap(){ return selectedMap; }
 
 	void MainLoop(sf::RenderWindow* window);
+	void AILoop(sf::RenderWindow* window);
 
 	std::vector<std::string> mapList;
 private:

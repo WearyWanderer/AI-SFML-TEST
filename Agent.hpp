@@ -15,6 +15,7 @@ public:
 		zoomSet = zoomToSet;
 	}
 	void SetSpriteRelativePos(int x, int y);
+	void GenerateStraightPath();
 	void ProgressForward();
 
 	bool pathDrawn = false;
@@ -24,7 +25,9 @@ public:
 	int zoomSet = 1;
 	sf::Vector2i lastNodePos;
 	sf::Vector2i nextNodePos;
+	float magAlongPath = 0;
 
 	std::vector<sf::Vector2i> nodesToFollow;
+	std::vector<sf::Vector2i> currentPathPos;
 };
 
