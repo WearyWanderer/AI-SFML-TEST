@@ -18,6 +18,13 @@ struct Tile
 	Tile(int xPos, int yPos, char tileSymbolID) : x(xPos), y(yPos), tileSymbol(tileSymbolID) {}; //constructor
 
 	inline char checkSymbol(){ return tileSymbol; }
+	inline bool checkPassable()
+	{
+		if (checkSymbol() == '@' || checkSymbol() == 'O' || checkSymbol() == 'T' || checkSymbol() == 'W')
+			return false;
+		else
+			return true;
+	}
 	inline sf::Vector2i getPos(){ return sf::Vector2i(x, y); }
 };
 

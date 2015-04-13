@@ -28,6 +28,8 @@ void MapDrawer::InitMapTexture(sf::RenderWindow* screen, Tile mapToDraw[], int m
 						break;
 					case '@': //impassable terrain
 					case 'O':
+					case 'T':
+					case 'W':
 					{
 						switch (i)
 						{
@@ -48,11 +50,6 @@ void MapDrawer::InitMapTexture(sf::RenderWindow* screen, Tile mapToDraw[], int m
 								pixels[index] = 255;
 								break;
 						}
-					}
-						break;
-					case 'T':
-					{
-						pixels[index] = 0;
 					}
 						break;
 					default:

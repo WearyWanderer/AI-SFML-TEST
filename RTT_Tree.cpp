@@ -264,7 +264,7 @@ bool RTT_Tree::BuildLine(RTT_Node* node1, RTT_Node* node2)
 	for (int i = 0; i < magnitude; i++)
 	{
 		sf::Vector2i arrayLoc(pos1 + (sf::Vector2i)((float)i * unitVector));
-		if (MapMngr.GetMap()[(arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x].checkSymbol() == '@')
+		if (!MapMngr.GetMap()[(arrayLoc.y * MapMngr.GetMapWidth()) + arrayLoc.x].checkPassable())
 		{
 			return false;
 		}
