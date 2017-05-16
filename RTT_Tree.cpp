@@ -80,25 +80,11 @@ void RTT_Tree::GenerateNode(int nodeLength, bool withRoot)
 						nodeTree.push_back(tempNode);
 						return;
 					}
-					else
-					{
-						i--;
-					}
-				}
-				else
-				{
-					i--;
 				}
 			}
-			else
-			{
-				i--;
-			}
 		}
-		else
-		{
-			i--;
-		}
+
+		--i;
 	}
 
 }
@@ -126,25 +112,11 @@ void RTT_Tree::GenerateNode(int nodeLength)
 						nodeTree.push_back(tempNode);
 						return;
 					}
-					else
-					{
-						i--;
-					}
-				}
-				else
-				{
-					i--;
 				}
 			}
-			else
-			{
-				i--;
-			}
 		}
-		else
-		{
-			i--;
-		}
+
+		--i;
 	}
 }
 
