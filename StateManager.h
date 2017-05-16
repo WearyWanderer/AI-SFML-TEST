@@ -62,5 +62,7 @@ private:
 
 	sf::Text mapListText;
 	sf::Text headerText;
+	sf::Text instructionText;
+	std::string inst[5];
 	int selectedMap = 0;
 };

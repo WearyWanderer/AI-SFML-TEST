@@ -8,6 +8,17 @@ StateManager::StateManager()
 	headerText.setColor(sf::Color::Cyan);
 	headerText.setScale(0.75, 0.75);
 	headerText.setString("RRT Pathfinding Algorithm - Andrew Ayre, 2015");
+
+	inst[0] = "Welcome to my RRT Demo!";
+	inst[1] = "-Press Up / Down & Enter to cycle and select a map";
+	inst[2] = "-Click anywhere on a map to begin generating a RRT Tree [Spacebar to pause/resume]";
+	inst[3] = "-Press 'H' to switch between RRT and agent pathfinding, click anywhere to show agent's route";
+	inst[4] = "-Press 1,2,3 or 4 to alter zoom level";
+
+	instructionText.setFont(InputMngr.defaultFont);
+	instructionText.setColor(sf::Color::Cyan);
+	instructionText.setScale(0.4, 0.4);
+
 //below is a quick regioned area where I push the name extensions of all maps in a directory into a vector for later loading
 #pragma region MapLoading
 	const char* folder = "maps\\*.map";
@@ -52,6 +63,16 @@ void StateManager::MainLoop(sf::RenderWindow* window)
 	case mainMenu:
 	{
 		window->draw(headerText); //draw the title
+
+		instructionText.setPosition(285, 560);
+		instructionText.setString(inst[0]);
+		window->draw(instructionText);
+		for (unsigned int i = 0; i < 4; i++)
+		{
+			instructionText.setPosition(80, 580 + (i * 20));
+			instructionText.setString(inst[i + 1]);
+			window->draw(instructionText);
+		}
 		for (unsigned int i = 0; i < mapList.size(); i++)
 		{
 			if (selectedMap == i)

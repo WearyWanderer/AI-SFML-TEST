@@ -168,6 +168,9 @@ void InputManager::InputCycle(sf::RenderWindow* targetWindow, int enumState)
 #pragma endregion
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		{
+			
 			Game.SwitchState(mainMenu);
+		}
 	}
 }
